@@ -17,7 +17,7 @@ namespace ADPSemesterProject
 {
     public partial class Form2 : Form
     {
-        
+
         public string username = "";
         public bool isAdmin = false;
         public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
@@ -109,5 +109,11 @@ namespace ADPSemesterProject
             this.username = username;
             this.isAdmin = isAdmin;
         }
+        //this is to actually close the program when Form2 is closed, otherwise it will just keep running without any UI.
+        private void Form2_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
     }
 }

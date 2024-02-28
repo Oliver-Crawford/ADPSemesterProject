@@ -59,6 +59,7 @@
             Controls.Add(dataGridView1);
             Name = "Form2";
             Text = "Form2";
+            FormClosed += Form2_FormClosed;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
