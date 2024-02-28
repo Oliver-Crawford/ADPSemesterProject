@@ -28,12 +28,77 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            lName = new Label();
+            txtBName = new TextBox();
+            btnLogin = new Button();
+            txtBPassword = new TextBox();
+            lPassword = new Label();
+            SuspendLayout();
+            // 
+            // lName
+            // 
+            lName.AutoSize = true;
+            lName.Location = new Point(167, 166);
+            lName.Name = "lName";
+            lName.Size = new Size(39, 15);
+            lName.TabIndex = 0;
+            lName.Text = "Name";
+            // 
+            // txtBName
+            // 
+            txtBName.Location = new Point(234, 163);
+            txtBName.Name = "txtBName";
+            txtBName.Size = new Size(100, 23);
+            txtBName.TabIndex = 1;
+            // 
+            // btnLogin
+            // 
+            btnLogin.Location = new Point(403, 192);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(75, 23);
+            btnLogin.TabIndex = 2;
+            btnLogin.Text = "Login";
+            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.Click += btnLogin_Click;
+            // 
+            // txtBPassword
+            // 
+            txtBPassword.Location = new Point(234, 192);
+            txtBPassword.Name = "txtBPassword";
+            txtBPassword.Size = new Size(100, 23);
+            txtBPassword.TabIndex = 4;
+            // 
+            // lPassword
+            // 
+            lPassword.AutoSize = true;
+            lPassword.Location = new Point(167, 195);
+            lPassword.Name = "lPassword";
+            lPassword.Size = new Size(57, 15);
+            lPassword.TabIndex = 3;
+            lPassword.Text = "Password";
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(txtBPassword);
+            Controls.Add(lPassword);
+            Controls.Add(btnLogin);
+            Controls.Add(txtBName);
+            Controls.Add(lName);
+            Name = "Form1";
+            Text = "Form1";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label lName;
+        private TextBox txtBName;
+        private Button btnLogin;
+        private TextBox txtBPassword;
+        private Label lPassword;
     }
 }
