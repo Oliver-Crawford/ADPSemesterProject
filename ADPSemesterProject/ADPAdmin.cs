@@ -27,7 +27,9 @@ namespace ADPSemesterProject
         static IMongoCollection<Orders> ordersCollection = db.GetCollection<Orders>("orders");
         static IMongoCollection<Staff> staffCollection = db.GetCollection<Staff>("staff");
         static IMongoCollection<Tables> tablesCollection = db.GetCollection<Tables>("tables");
-        //These classes are my collection definitions
+        //true is users, false is menu.
+        bool currentView = true;
+
         class Menu
         {
             [BsonId]
@@ -87,7 +89,10 @@ namespace ADPSemesterProject
             this.password = password;
             this.parent = parent;
             this.BackColor = parent.BackColor;
+            DisplayContent("staffCollection");
         }
+
+        //Displays table contents based on the given collection name
         public void DisplayContent(string collectionName)
         {
             switch (collectionName)
@@ -130,11 +135,138 @@ namespace ADPSemesterProject
         private void btnUsersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("staffCollection");
+            currentView = true;
+            lCurrentViewSelected.Text = "Users is currently selected";
         }
 
         private void btnMenuRead_Click(object sender, EventArgs e)
         {
             DisplayContent("menuCollection");
+            currentView = false;
+            lCurrentViewSelected.Text = "Menu is currently selected";
+        }
+
+        private void btnCreateUser_Click(object sender, EventArgs e)
+        {
+
+            int tryParseAccess = -1;
+            if (int.TryParse(txtBUsersAccessLevel.Text, out tryParseAccess))
+            {
+                if (tryParseAccess > -1 && tryParseAccess < 3)
+                {
+                    Staff newUser = new Staff() { Name = txtBUsersName.Text, Password = txtBUsersPassword.Text, Role = txtBUsersRole.Text, AccessLevel = tryParseAccess };
+                    staffCollection.InsertOne(newUser);
+                    DisplayContent("staffCollection");
+                }
+                else
+                {
+                    MessageBox.Show("Access level must be 0, 1, or 2");
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("The Access Level needs to be a whole number!");
+            }
+        }
+
+        private void btnCreateMenu_Click(object sender, EventArgs e)
+        {
+            double tryParseCost = 0.0;
+            double tryParseDiscount = 0.0;
+            if (!double.TryParse(txtBMenuCost.Text, out tryParseCost))
+            {
+                MessageBox.Show("Menu Cost must be a number!");
+                return;
+            }
+            if (!double.TryParse(txtBMenuDiscount.Text, out tryParseDiscount))
+            {
+                MessageBox.Show("Discount must be a number!");
+                return;
+            }
+            if (tryParseDiscount > 1)
+            {
+                MessageBox.Show("Discount can't be greater than 1!");
+                return;
+            }
+            Menu newMenu = new Menu() { Name = txtBMenuName.Text, Cost = tryParseCost, Discount = tryParseDiscount, Category = txtBMenuCategory.Text, Description = txtBMenuDescription.Text };
+            menuCollection.InsertOne(newMenu);
+            DisplayContent("menuCollection");
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //This is to handle if the user clicks the column selecter, which doesn't have any use here.
+            if(e.RowIndex == -1)
+            {
+                return;
+            }
+            if (currentView)
+            {
+                //Updates user info
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 1:
+                        txtBUsersName.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 2:
+                        txtBUsersPassword.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 3:
+                        txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 4:
+                        txtBUsersAccessLevel.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case -1:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        txtBUsersName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtBUsersPassword.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        txtBUsersAccessLevel.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                        break;
+                    default:
+                        break;
+                }
+            } else
+            {
+                //updates menu info
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 1:
+                        txtBMenuName.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 2:
+                        txtBMenuCost.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 3:
+                        txtBMenuDiscount.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 4:
+                        txtBMenuCategory.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 5:
+                        txtBMenuDescription.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case -1:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        txtBMenuName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtBMenuCost.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        txtBMenuDiscount.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        txtBMenuCategory.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                        txtBMenuDescription.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
         }
     }
 }

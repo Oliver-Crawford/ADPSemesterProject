@@ -53,6 +53,9 @@
             label11 = new Label();
             txtBID = new TextBox();
             lID = new Label();
+            btnCreateUser = new Button();
+            btnCreateMenu = new Button();
+            lCurrentViewSelected = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -63,6 +66,7 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(776, 150);
             dataGridView1.TabIndex = 4;
+            dataGridView1.CellClick += dataGridView1_CellClick;
             // 
             // lUsers
             // 
@@ -262,11 +266,43 @@
             lID.TabIndex = 27;
             lID.Text = "ID";
             // 
+            // btnCreateUser
+            // 
+            btnCreateUser.Location = new Point(12, 316);
+            btnCreateUser.Name = "btnCreateUser";
+            btnCreateUser.Size = new Size(75, 23);
+            btnCreateUser.TabIndex = 29;
+            btnCreateUser.Text = "Create User";
+            btnCreateUser.UseVisualStyleBackColor = true;
+            btnCreateUser.Click += btnCreateUser_Click;
+            // 
+            // btnCreateMenu
+            // 
+            btnCreateMenu.Location = new Point(609, 345);
+            btnCreateMenu.Name = "btnCreateMenu";
+            btnCreateMenu.Size = new Size(89, 23);
+            btnCreateMenu.TabIndex = 30;
+            btnCreateMenu.Text = "Create Menu";
+            btnCreateMenu.UseVisualStyleBackColor = true;
+            btnCreateMenu.Click += btnCreateMenu_Click;
+            // 
+            // lCurrentViewSelected
+            // 
+            lCurrentViewSelected.AutoSize = true;
+            lCurrentViewSelected.Location = new Point(326, 197);
+            lCurrentViewSelected.Name = "lCurrentViewSelected";
+            lCurrentViewSelected.Size = new Size(142, 15);
+            lCurrentViewSelected.TabIndex = 31;
+            lCurrentViewSelected.Text = "Users is currently selected";
+            // 
             // ADPAdmin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(lCurrentViewSelected);
+            Controls.Add(btnCreateMenu);
+            Controls.Add(btnCreateUser);
             Controls.Add(txtBID);
             Controls.Add(lID);
             Controls.Add(txtBMenuDescription);
@@ -327,5 +363,8 @@
         private Label label11;
         private TextBox txtBID;
         private Label lID;
+        private Button btnCreateUser;
+        private Button btnCreateMenu;
+        private Label lCurrentViewSelected;
     }
 }
