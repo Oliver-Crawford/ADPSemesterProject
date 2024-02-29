@@ -32,6 +32,7 @@
             dataGridView1 = new DataGridView();
             btnManagement = new Button();
             btnStaff = new Button();
+            btnRefresh = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -78,16 +79,27 @@
             btnStaff.UseVisualStyleBackColor = true;
             btnStaff.Click += btnStaff_Click;
             // 
-            // Form2
+            // btnRefresh
+            // 
+            btnRefresh.Location = new Point(12, 168);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(75, 23);
+            btnRefresh.TabIndex = 6;
+            btnRefresh.Text = "Refresh";
+            btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click;
+            // 
+            // ADPMainMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnRefresh);
             Controls.Add(btnStaff);
             Controls.Add(btnManagement);
             Controls.Add(dataGridView1);
             Controls.Add(btnAdmin);
-            Name = "Form2";
+            Name = "ADPMainMenu";
             Text = "Form2";
             FormClosed += Form2_FormClosed;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -100,5 +112,6 @@
         private DataGridView dataGridView1;
         private Button btnManagement;
         private Button btnStaff;
+        private Button btnRefresh;
     }
 }
