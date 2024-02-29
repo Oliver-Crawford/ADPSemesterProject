@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Forms;
 namespace ADPSemesterProject
 {
-    public partial class Form1 : Form
+    public partial class LoginForm : Form
     {
         public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
         public static IMongoDatabase db = dbClient.GetDatabase("semester");
@@ -22,12 +22,12 @@ namespace ADPSemesterProject
             [BsonElement("Role")]
             public string Role { get; set; }
             [BsonElement("AccessLevel")]
-            public bool AccessLevel { get; set; }
+            public int AccessLevel { get; set; }
 
         }
 
 
-        public Form1()
+        public LoginForm()
         {
             InitializeComponent();
         }
@@ -39,9 +39,9 @@ namespace ADPSemesterProject
             List<Staff> staffList = staffCollection.Find(filter).ToList();
             if (staffList.Any())
             {
-                Form2 form2 = new Form2(staffList[0].Name, staffList[0].AccessLevel);
+                ADPMainMenu ADPForms = new ADPMainMenu(staffList[0].Name, staffList[0].AccessLevel, staffList[0].Password, this);
                 this.Hide();
-                form2.Show();
+                ADPForms.Show();
             }
             else
             {

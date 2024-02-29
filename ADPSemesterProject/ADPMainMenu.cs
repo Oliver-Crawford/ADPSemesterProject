@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Authentication;
 using System;
@@ -15,11 +16,13 @@ using System.Windows.Forms;
 
 namespace ADPSemesterProject
 {
-    public partial class Form2 : Form
+    public partial class ADPMainMenu : Form
     {
 
         public string username = "";
-        public bool isAdmin = false;
+        public int accessLevel = 2;
+        public string password = "";
+        public Form parent;
         public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
         public static IMongoDatabase db = dbClient.GetDatabase("semester");
         static IMongoCollection<Menu> menuCollection = db.GetCollection<Menu>("menu");
@@ -30,7 +33,7 @@ namespace ADPSemesterProject
         class Menu
         {
             [BsonId]
-            public int ID { get; set; }
+            public BsonObjectId ID { get; set; }
             [BsonElement("Name")]
             public string Name { get; set; }
             [BsonElement("Cost")]
@@ -45,16 +48,16 @@ namespace ADPSemesterProject
         class Orders
         {
             [BsonId]
-            public int ID { get; set; }
+            public BsonObjectId ID { get; set; }
             [BsonElement("ItemsOrdered")]
-            public string ItemsOrdered { get; set; }
+            public List<string> ItemsOrdered { get; set; }
             [BsonElement("TotalCost")]
             public double TotalCost { get; set; }
         }
         class Staff
         {
             [BsonId]
-            public int ID { get; set; }
+            public BsonObjectId ID { get; set; }
             [BsonElement("Name")]
             public string Name { get; set; }
             [BsonElement("Password")]
@@ -62,13 +65,13 @@ namespace ADPSemesterProject
             [BsonElement("Role")]
             public string Role { get; set; }
             [BsonElement("AccessLevel")]
-            public bool AccessLevel { get; set; }
+            public int AccessLevel { get; set; }
 
         }
         class Tables
         {
             [BsonId]
-            public int ID { get; set; }
+            public BsonObjectId ID { get; set; }
             [BsonElement("TableStatus")]
             public string TableStatus { get; set; }
             [BsonElement("OrderStatus")]
@@ -76,6 +79,39 @@ namespace ADPSemesterProject
             [ForeignKey("OrderID")]
             public int OrderID { get; set; }
 
+        }
+        public ADPMainMenu(string username, int accessLevel, string password, Form parent)
+        {
+            InitializeComponent();
+            this.username = username;
+            this.accessLevel = accessLevel;
+            this.password = password;
+            this.parent = parent;
+            AccessLevelStartup(accessLevel);
+        }
+        public void AccessLevelStartup(int accessLevel)
+        {
+            switch (accessLevel)
+            {
+                case 0:
+                    btnAdmin.Enabled = true;
+                    btnManagement.Enabled = true;
+                    DisplayContent("staffCollection");
+                    this.BackColor = Color.PaleVioletRed;
+                    break;
+                case 1:
+                    btnManagement.Enabled = true;
+                    DisplayContent("filteredSCUserOnly");
+                    this.BackColor = Color.PaleTurquoise;
+                    break;
+                case 2:
+                    DisplayContent("filteredSCUserOnly");
+                    break;
+                default:
+                    MessageBox.Show($"Something has gone wrong! \n Access Level {accessLevel} should not exist.");
+                    this.BackColor = Color.DarkGray;
+                    break;
+            }
         }
         public void DisplayContent(string collectionName)
         {
@@ -97,23 +133,41 @@ namespace ADPSemesterProject
                     List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = tablesList;
                     break;
+                case "filteredSCUserOnly":
+                    var builderC2 = Builders<Staff>.Filter;
+                    var filterC2 = builderC2.Eq("Name", username) & builderC2.Eq("Password", password);
+                    List<Staff> filteredUserOnlyList = staffCollection.Find(filterC2).ToList();
+                    dataGridView1.DataSource = filteredUserOnlyList;
+
+                    break;
                 default:
                     MessageBox.Show("No known collection called " + collectionName);
                     break;
             }
 
         }
-        public Form2(string username, bool isAdmin)
-        {
-            InitializeComponent();
-            this.username = username;
-            this.isAdmin = isAdmin;
-        }
+
         //this is to actually close the program when Form2 is closed, otherwise it will just keep running without any UI.
         private void Form2_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Application.Exit();
+            parent.Show();
         }
 
+        private void btnAdmin_Click(object sender, EventArgs e)
+        {
+            ADPAdmin ADPAdmin = new ADPAdmin(username, accessLevel, password, this);
+            this.Hide();
+            ADPAdmin.Show();
+        }
+
+        private void btnManagement_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnStaff_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
