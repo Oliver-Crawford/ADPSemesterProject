@@ -162,7 +162,9 @@ namespace ADPSemesterProject
 
         private void btnManagement_Click(object sender, EventArgs e)
         {
-
+            ADPManagement ADPManagement = new ADPManagement(username, accessLevel, password, this);
+            this.Hide();
+            ADPManagement.Show();
         }
 
         private void btnStaff_Click(object sender, EventArgs e)
