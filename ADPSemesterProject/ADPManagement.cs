@@ -76,8 +76,8 @@ namespace ADPSemesterProject
             public string TableStatus { get; set; }
             [BsonElement("OrderStatus")]
             public string OrderStatus { get; set; }
-            [ForeignKey("OrderID")]
-            public int OrderID { get; set; }
+            [ForeignKey("OrdersForiegnKey")]
+            public ObjectId OrdersForiegnKey { get; set; }
 
         }
         class ItemsOrdered
@@ -90,8 +90,8 @@ namespace ADPSemesterProject
             public bool Discounted { get; set; }
             [BsonElement("Cost")]
             public double Cost { get; set; }
-            [ForeignKey("OrdersForignKey")]
-            public ObjectId OrdersForignKey { get; set; }
+            [ForeignKey("OrdersForiegnKey")]
+            public ObjectId OrdersForiegnKey { get; set; }
         }
         public ADPManagement(string username, int accessLevel, string password, Form parent)
         {
@@ -156,7 +156,7 @@ namespace ADPSemesterProject
                     try
                     {
                         var itemsOrderedBuilder = Builders<ItemsOrdered>.Filter;
-                        var itemsOrderedFilter = itemsOrderedBuilder.Eq("OrdersForignKey", ObjectId.Parse(txtBID.Text));
+                        var itemsOrderedFilter = itemsOrderedBuilder.Eq("OrdersForiegnKey", ObjectId.Parse(txtBID.Text));
                         List<ItemsOrdered> filteredOrders = itemsOrderedCollection.Find(itemsOrderedFilter).ToList();
                         dataGridView1.DataSource = filteredOrders;
                         btnCreate.Enabled = false;
@@ -201,6 +201,9 @@ namespace ADPSemesterProject
                 case "unknownSelection":
                     MessageBox.Show($"Unkown selection made: {passthrough}");
                     break;
+                case "invalidID":
+                    MessageBox.Show($"invalid ID: {passthrough}");
+                    break;
 
                 default:
                     MessageBox.Show($"Unknown error: {er}");
@@ -224,7 +227,6 @@ namespace ADPSemesterProject
             switch (currentView)
             {
                 case "user":
-                    //Updates user info
                     switch (e.ColumnIndex)
                     {
                         case 0:
@@ -243,6 +245,7 @@ namespace ADPSemesterProject
                     break;
                 case "order":
                     txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                    txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                     break;
                 case "itemsordered":
                     switch (e.ColumnIndex)
@@ -258,6 +261,31 @@ namespace ADPSemesterProject
                             break;
                         case 3:
                             txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            break;
+                    }
+                    break;
+                case "tables":
+                    switch (e.ColumnIndex)
+                    {
+                        case 0:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                            break;
+                        case 1:
+                            txtBTableStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            break;
+                        case 2:
+                            txtBTableOrderStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                            break;
+                        case 3:
+                            txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            break;
+                        case -1:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                            txtBTableStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            txtBTableOrderStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                            txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            break;
+                        default:
                             break;
                     }
                     break;
@@ -287,12 +315,35 @@ namespace ADPSemesterProject
             switch (currentView)
             {
                 case "user":
-                    var filterUser = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                    var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
-                    staffCollection.UpdateOne(filterUser, updateUser);
-                    DisplayContent("filteredUsersProjectionManagement");
+                    try
+                    {
+                        var filterUser = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                        var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
+                        staffCollection.UpdateOne(filterUser, updateUser);
+                        DisplayContent("filteredUsersProjectionManagement");
+                    } catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    
                     break;
 
+                case "tables":
+                    ObjectId id;
+                    if(!ObjectId.TryParse(txtBID.Text, out id))
+                    {
+                        DisplayError("invalidID", txtBID.Text);
+                        break;
+                    }
+                    var filterTables = Builders<Tables>.Filter.Eq("ID", id);
+                    var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
+                    ObjectId foreignKey;
+                    if(!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey)){
+                        updateTables.Set("OrdersForiegnKey", foreignKey);
+                    }
+                    tablesCollection.UpdateOne(filterTables, updateTables);
+                    DisplayContent("tablesCollection");
+                    break;
 
                 default:
                     DisplayErrorUnknownSelectionHandler(e);
@@ -305,26 +356,47 @@ namespace ADPSemesterProject
             switch (currentView)
             {
                 case "order":
-                    ObjectId Id = ObjectId.Parse(txtBID.Text);
-                    //make sure the order you're deleting exists
-                    var filterOrder = Builders<Orders>.Filter.Eq("ID", Id);
-                    List<Orders> ordersList = ordersCollection.Find(filterOrder).ToList();
-                    if (ordersList.Count == 0)
+                    try
                     {
-                        MessageBox.Show("Invalid Order ID");
-                        break;
+                        ObjectId Id = ObjectId.Parse(txtBID.Text);
+                        //make sure the order you're deleting exists
+                        var filterOrder = Builders<Orders>.Filter.Eq("ID", Id);
+                        List<Orders> ordersList = ordersCollection.Find(filterOrder).ToList();
+                        if (ordersList.Count == 0)
+                        {
+                            Exception thrown = new Exception("Invalid Order ID");
+                            throw thrown;
+                        }
+                        //delete all the items ordered relating to this order
+                        var filterGetItemsOrdered = Builders<ItemsOrdered>.Filter.Eq("OrdersForiegnKey", Id);
+                        List<ItemsOrdered> itemsOrderedList = itemsOrderedCollection.Find(filterGetItemsOrdered).ToList();
+                        foreach (ItemsOrdered item in itemsOrderedList)
+                        {
+                            var filterDeleteItem = Builders<ItemsOrdered>.Filter.Eq("ID", item.ID);
+                            itemsOrderedCollection.DeleteOne(filterDeleteItem);
+                        }
+                        //delete the order
+                        ordersCollection.DeleteOne(filterOrder);
+                        DisplayContent("ordersCollection");
                     }
-                    //delete all the items ordered relating to this order
-                    var filterGetItemsOrdered = Builders<ItemsOrdered>.Filter.Eq("OrdersForignKey", Id);
-                    List<ItemsOrdered> itemsOrderedList = itemsOrderedCollection.Find(filterGetItemsOrdered).ToList();
-                    foreach (ItemsOrdered item in itemsOrderedList)
+                    catch (Exception ex)
                     {
-                        var filterDeleteItem = Builders<ItemsOrdered>.Filter.Eq("ID", item.ID);
-                        itemsOrderedCollection.DeleteOne(filterDeleteItem);
+                        MessageBox.Show(ex.Message);
                     }
-                    //delete the order
-                    ordersCollection.DeleteOne(filterOrder);
-                    DisplayContent("ordersCollection");
+                    break;
+
+                case "tables":
+                    try
+                    {
+                        ObjectId Id = ObjectId.Parse(txtBID.Text);
+                        var filterTable = Builders<Tables>.Filter.Eq("ID", Id);
+                        tablesCollection.DeleteOne(filterTable);
+                        DisplayContent("tablesCollection");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                     break;
                 default:
                     DisplayErrorUnknownSelectionHandler(e);
@@ -361,8 +433,23 @@ namespace ADPSemesterProject
                     ordersCollection.InsertOne(newOrder);
                     DisplayContent("ordersCollection");
                     break;
-
-
+                case "tables":
+                    try
+                    {
+                        Tables newTable = new Tables() {TableStatus = txtBTableStatus.Text, OrderStatus = txtBTableOrderStatus.Text};
+                        ObjectId foreignKey;
+                        if(ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
+                        {
+                            newTable.OrdersForiegnKey = foreignKey;
+                        }
+                        tablesCollection.InsertOne(newTable);
+                        DisplayContent("tablesCollection");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    break;
                 default:
                     DisplayErrorUnknownSelectionHandler(e);
                     break;
@@ -383,10 +470,10 @@ namespace ADPSemesterProject
                     throw thrown;
                 }
                 //insert the new item
-                ItemsOrdered newItemsOrdered = new ItemsOrdered() { Name = txtBOrderItemsName.Text, Discounted = chkBDiscounted.Checked, OrdersForignKey = ObjectId.Parse(txtBID.Text) };
+                ItemsOrdered newItemsOrdered = new ItemsOrdered() { Name = txtBOrderItemsName.Text, Discounted = chkBDiscounted.Checked, OrdersForiegnKey = ObjectId.Parse(txtBID.Text) };
                 //grab the order info before inserting, to account for the order not existing anymore for some reason
                 var builderGetOrderInfo = Builders<Orders>.Filter;
-                var filterGetOrderInfo = builderGetOrderInfo.Eq("ID", newItemsOrdered.OrdersForignKey);
+                var filterGetOrderInfo = builderGetOrderInfo.Eq("ID", newItemsOrdered.OrdersForiegnKey);
                 List<Orders> filteredOrderInfo = ordersCollection.Find(filterGetOrderInfo).ToList();
                 if (filteredOrderInfo.Count == 0)
                 {
@@ -431,11 +518,11 @@ namespace ADPSemesterProject
                     throw thrown;
                 }
                 //get the orders collection based on the itemOrder foreign key, we need to make a new total cost
-                var filterGetOrder = Builders<Orders>.Filter.Eq("ID", itemOrderedList[0].OrdersForignKey);
+                var filterGetOrder = Builders<Orders>.Filter.Eq("ID", itemOrderedList[0].OrdersForiegnKey);
                 List<Orders> ordersList = ordersCollection.Find(filterGetOrder).ToList();
                 if (ordersList.Count == 0)
                 {
-                    Exception thrown = new Exception($"Orphaned itemsOrdered: {itemOrderedList[0].OrdersForignKey}");
+                    Exception thrown = new Exception($"Orphaned itemsOrdered: {itemOrderedList[0].OrdersForiegnKey}");
                     throw thrown;
                 }
                 //now that I have all the information i need, and errors probably won't happen due to user error, delete that item
