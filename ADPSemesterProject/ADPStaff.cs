@@ -11,11 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.VisualBasic.ApplicationServices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ADPSemesterProject
 {
-    public partial class ADPManagement : Form
+    public partial class ADPStaff : Form
     {
         public string username = "";
         public int accessLevel = 2;
@@ -29,8 +29,7 @@ namespace ADPSemesterProject
         static IMongoCollection<Tables> tablesCollection = db.GetCollection<Tables>("tables");
         static IMongoCollection<ItemsOrdered> itemsOrderedCollection = db.GetCollection<ItemsOrdered>("itemsordered");
 
-        string currentView = "user";
-
+        string currentView = "tables";
         class Menu
         {
             [BsonId]
@@ -92,7 +91,8 @@ namespace ADPSemesterProject
             [ForeignKey("OrdersForeignKey")]
             public ObjectId OrdersForeignKey { get; set; }
         }
-        public ADPManagement(string username, int accessLevel, string password, Form parent)
+
+        public ADPStaff(string username, int accessLevel, string password, Form parent)
         {
             InitializeComponent();
             this.username = username;
@@ -100,10 +100,8 @@ namespace ADPSemesterProject
             this.password = password;
             this.parent = parent;
             this.BackColor = parent.BackColor;
-            DisplayContent("filteredUsersProjectionManagement");
+            DisplayContent("tablesCollection");
         }
-
-        //Displays table contents based on the given collection name
         public void DisplayContent(string collectionName)
         {
             switch (collectionName)
@@ -130,9 +128,9 @@ namespace ADPSemesterProject
                 case "tablesCollection":
                     List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = tablesList;
-                    btnCreate.Enabled = true;
+                    btnCreate.Enabled = false;
                     btnUpdate.Enabled = true;
-                    btnDelete.Enabled = true;
+                    btnDelete.Enabled = false;
                     btnReadOrderItems.Enabled = false;
                     btnOrderItemsCreate.Enabled = false;
                     btnOrderItemsDelete.Enabled = false;
@@ -151,7 +149,7 @@ namespace ADPSemesterProject
                     break;
                 case "itemsOrderedCollection":
                     ObjectId itemsOrderedId;
-                    if(!ObjectId.TryParse(txtBID.Text, out itemsOrderedId))
+                    if (!ObjectId.TryParse(txtBID.Text, out itemsOrderedId))
                     {
                         DisplayError("invalidID", txtBID.Text);
                         break;
@@ -173,6 +171,22 @@ namespace ADPSemesterProject
                     break;
             }
 
+        }
+        public void DisplayErrorUnknownSelectionHandler(EventArgs e)
+        {
+            if (e.ToString() == null)
+            {
+                DisplayError("unknownSelection", "null");
+
+            }
+            else
+            {
+                DisplayError("unknownSelection", e.ToString());
+            }
+        }
+        private void ADPStaff_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
         }
 
         public void DisplayError(string er, string passthrough = "")
@@ -200,12 +214,7 @@ namespace ADPSemesterProject
                 case "invalidID":
                     MessageBox.Show($"invalid ID: {passthrough}");
                     break;
-                case "badItemName":
-                    MessageBox.Show($"Bad item name, {passthrough} is not an item.");
-                    break;
-                case "orphanedItem":
-                    MessageBox.Show($"Order could not be found, Order {passthrough} does not exist");
-                    break;
+
                 default:
                     MessageBox.Show($"Unknown error: {er}");
                     break;
@@ -213,9 +222,25 @@ namespace ADPSemesterProject
             }
         }
 
-        private void ADPManagement_FormClosed(object sender, FormClosedEventArgs e)
+        private void btnTableRead_Click(object sender, EventArgs e)
         {
-            parent.Show();
+            DisplayContent("tablesCollection");
+            currentView = "tables";
+            lCurrentViewSelected.Text = "Tables is currently selected";
+        }
+
+        private void btnOrdersRead_Click(object sender, EventArgs e)
+        {
+            DisplayContent("ordersCollection");
+            currentView = "order";
+            lCurrentViewSelected.Text = "Orders is currently selected";
+        }
+
+        private void btnReadOrderItems_Click(object sender, EventArgs e)
+        {
+            currentView = "itemsordered";
+            lCurrentViewSelected.Text = "Order Items is currently selected";
+            DisplayContent("itemsOrderedCollection");
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -227,23 +252,6 @@ namespace ADPSemesterProject
             }
             switch (currentView)
             {
-                case "user":
-                    switch (e.ColumnIndex)
-                    {
-                        case 0:
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                            break;
-                        case 3:
-                            txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                            break;
-                        case -1:
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                            txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
                 case "order":
                     txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                     txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
@@ -293,58 +301,17 @@ namespace ADPSemesterProject
                     break;
                 default:
                     break;
-
-
             }
         }
 
-        private void btnUsersRead_Click(object sender, EventArgs e)
-        {
-            DisplayContent("filteredUsersProjectionManagement");
-            currentView = "user";
-            lCurrentViewSelected.Text = "Users is currently selected";
-        }
-
-        private void btnOrdersRead_Click(object sender, EventArgs e)
-        {
-            DisplayContent("ordersCollection");
-            currentView = "order";
-            lCurrentViewSelected.Text = "Orders is currently selected";
-        }
-
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private void btnCreate_Click(object sender, EventArgs e)
         {
             switch (currentView)
             {
-                case "user":
-                    try
-                    {
-                        var filterUser = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                        var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
-                        staffCollection.UpdateOne(filterUser, updateUser);
-                        DisplayContent("filteredUsersProjectionManagement");
-                    } catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    
-                    break;
-
-                case "tables":
-                    ObjectId id;
-                    if(!ObjectId.TryParse(txtBID.Text, out id))
-                    {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
-                    }
-                    var filterTables = Builders<Tables>.Filter.Eq("ID", id);
-                    var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
-                    ObjectId foreignKey;
-                    if(!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey)){
-                        updateTables.Set("OrdersForeignKey", foreignKey);
-                    }
-                    tablesCollection.UpdateOne(filterTables, updateTables);
-                    DisplayContent("tablesCollection");
+                case "order":
+                    Orders newOrder = new Orders() { TotalCost = 0.0 };
+                    ordersCollection.InsertOne(newOrder);
+                    DisplayContent("ordersCollection");
                     break;
 
                 default:
@@ -384,70 +351,34 @@ namespace ADPSemesterProject
                     ordersCollection.DeleteOne(filterOrder);
                     DisplayContent("ordersCollection");
                     break;
+                default:
+                    DisplayErrorUnknownSelectionHandler(e);
+                    break;
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            switch (currentView)
+            {
                 case "tables":
-                    ObjectId tableId;
-                    if(!ObjectId.TryParse(txtBID.Text, out tableId))
+                    ObjectId id;
+                    if (!ObjectId.TryParse(txtBID.Text, out id))
                     {
                         DisplayError("invalidID", txtBID.Text);
                         break;
                     }
-                    var filterTable = Builders<Tables>.Filter.Eq("ID", tableId);
-                    tablesCollection.DeleteOne(filterTable);
+                    var filterTables = Builders<Tables>.Filter.Eq("ID", id);
+                    var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
+                    ObjectId foreignKey;
+                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
+                    {
+                        updateTables.Set("OrdersForeignKey", foreignKey);
+                    }
+                    tablesCollection.UpdateOne(filterTables, updateTables);
                     DisplayContent("tablesCollection");
                     break;
-                default:
-                    DisplayErrorUnknownSelectionHandler(e);
-                    break;
 
-            }
-        }
-
-        public void DisplayErrorUnknownSelectionHandler(EventArgs e)
-        {
-            if (e.ToString() == null)
-            {
-                DisplayError("unknownSelection", "null");
-
-            }
-            else
-            {
-                DisplayError("unknownSelection", e.ToString());
-            }
-        }
-
-        private void btnReadOrderItems_Click(object sender, EventArgs e)
-        {
-            currentView = "itemsordered";
-            lCurrentViewSelected.Text = "Order Items is currently selected";
-            DisplayContent("itemsOrderedCollection");
-        }
-
-        private void btnCreate_Click(object sender, EventArgs e)
-        {
-            switch (currentView)
-            {
-                case "order":
-                    Orders newOrder = new Orders() { TotalCost = 0.0 };
-                    ordersCollection.InsertOne(newOrder);
-                    DisplayContent("ordersCollection");
-                    break;
-                case "tables":
-                    try
-                    {
-                        Tables newTable = new Tables() {TableStatus = txtBTableStatus.Text, OrderStatus = txtBTableOrderStatus.Text};
-                        ObjectId foreignKey;
-                        if(ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
-                        {
-                            newTable.OrdersForeignKey = foreignKey;
-                        }
-                        tablesCollection.InsertOne(newTable);
-                        DisplayContent("tablesCollection");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    break;
                 default:
                     DisplayErrorUnknownSelectionHandler(e);
                     break;
@@ -467,7 +398,7 @@ namespace ADPSemesterProject
             }
             //check and make sure related ID exists
             ObjectId foreignKey;
-            if(!ObjectId.TryParse(txtBID.Text, out foreignKey))
+            if (!ObjectId.TryParse(txtBID.Text, out foreignKey))
             {
                 DisplayError("invalidID", txtBID.Text);
             }
@@ -478,7 +409,7 @@ namespace ADPSemesterProject
             List<Orders> filteredOrderInfo = ordersCollection.Find(filterGetOrderInfo).ToList();
             if (filteredOrderInfo.Count == 0)
             {
-                DisplayError("orphanedItem", txtBID.Text);
+                DisplayError("missingOrder", txtBID.Text);
                 return;
             }
             //calculate the amount to be added to the total
@@ -503,7 +434,7 @@ namespace ADPSemesterProject
         {
             //get the item that you want to delete
             ObjectId foreignKey;
-            if(!ObjectId.TryParse(txtBID.Text, out foreignKey))
+            if (!ObjectId.TryParse(txtBID.Text, out foreignKey))
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;
@@ -534,11 +465,31 @@ namespace ADPSemesterProject
             DisplayContent("ordersCollection");
         }
 
-        private void btnTableRead_Click(object sender, EventArgs e)
+        private void btnPrintBill_Click(object sender, EventArgs e)
         {
-            DisplayContent("tablesCollection");
-            currentView = "tables";
-            lCurrentViewSelected.Text = "Tables is currently selected";
+            ObjectId orderId;
+            if (!ObjectId.TryParse(txtBID.Text, out orderId))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            var ordersFilter = Builders<Orders>.Filter.Eq("ID", orderId);
+            List<Orders> filteredOrders = ordersCollection.Find(ordersFilter).ToList();
+            if(filteredOrders.Count == 0)
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            var orderItemsFilter = Builders<ItemsOrdered>.Filter.Eq("OrdersForeignKey", orderId);
+            List<ItemsOrdered> filteredItemsOrdered = itemsOrderedCollection.Find(orderItemsFilter).ToList();
+            string receipt = "ORDER: ";
+            receipt += filteredOrders[0].ID + "\n";
+            foreach(var item in filteredItemsOrdered)
+            {
+                receipt += $"{item.Name}: {item.Cost}$\n";
+            }
+            receipt += "Total: " + filteredOrders[0].TotalCost + "$";
+            MessageBox.Show(receipt);
         }
     }
 }
