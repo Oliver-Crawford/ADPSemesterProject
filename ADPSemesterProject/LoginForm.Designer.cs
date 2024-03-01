@@ -33,12 +33,14 @@
             btnLogin = new Button();
             txtBPassword = new TextBox();
             lPassword = new Label();
+            rBtnMongoDB = new RadioButton();
+            rBtnSQLDB = new RadioButton();
             SuspendLayout();
             // 
             // lName
             // 
             lName.AutoSize = true;
-            lName.Location = new Point(167, 166);
+            lName.Location = new Point(193, 166);
             lName.Name = "lName";
             lName.Size = new Size(39, 15);
             lName.TabIndex = 0;
@@ -46,14 +48,14 @@
             // 
             // txtBName
             // 
-            txtBName.Location = new Point(234, 163);
+            txtBName.Location = new Point(260, 163);
             txtBName.Name = "txtBName";
             txtBName.Size = new Size(100, 23);
             txtBName.TabIndex = 1;
             // 
             // btnLogin
             // 
-            btnLogin.Location = new Point(403, 192);
+            btnLogin.Location = new Point(331, 253);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(75, 23);
             btnLogin.TabIndex = 2;
@@ -63,7 +65,7 @@
             // 
             // txtBPassword
             // 
-            txtBPassword.Location = new Point(234, 192);
+            txtBPassword.Location = new Point(260, 192);
             txtBPassword.Name = "txtBPassword";
             txtBPassword.Size = new Size(100, 23);
             txtBPassword.TabIndex = 4;
@@ -71,23 +73,48 @@
             // lPassword
             // 
             lPassword.AutoSize = true;
-            lPassword.Location = new Point(167, 195);
+            lPassword.Location = new Point(193, 195);
             lPassword.Name = "lPassword";
             lPassword.Size = new Size(57, 15);
             lPassword.TabIndex = 3;
             lPassword.Text = "Password";
             // 
-            // Form1
+            // rBtnMongoDB
+            // 
+            rBtnMongoDB.AutoSize = true;
+            rBtnMongoDB.Checked = true;
+            rBtnMongoDB.Location = new Point(395, 164);
+            rBtnMongoDB.Name = "rBtnMongoDB";
+            rBtnMongoDB.Size = new Size(82, 19);
+            rBtnMongoDB.TabIndex = 5;
+            rBtnMongoDB.TabStop = true;
+            rBtnMongoDB.Text = "Mongo DB";
+            rBtnMongoDB.UseVisualStyleBackColor = true;
+            // 
+            // rBtnSQLDB
+            // 
+            rBtnSQLDB.AutoSize = true;
+            rBtnSQLDB.Location = new Point(395, 191);
+            rBtnSQLDB.Name = "rBtnSQLDB";
+            rBtnSQLDB.Size = new Size(64, 19);
+            rBtnSQLDB.TabIndex = 6;
+            rBtnSQLDB.TabStop = true;
+            rBtnSQLDB.Text = "SQL DB";
+            rBtnSQLDB.UseVisualStyleBackColor = true;
+            // 
+            // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(rBtnSQLDB);
+            Controls.Add(rBtnMongoDB);
             Controls.Add(txtBPassword);
             Controls.Add(lPassword);
             Controls.Add(btnLogin);
             Controls.Add(txtBName);
             Controls.Add(lName);
-            Name = "Form1";
+            Name = "LoginForm";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();
@@ -100,5 +127,7 @@
         private Button btnLogin;
         private TextBox txtBPassword;
         private Label lPassword;
+        private RadioButton rBtnMongoDB;
+        private RadioButton rBtnSQLDB;
     }
 }

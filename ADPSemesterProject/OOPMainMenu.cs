@@ -16,21 +16,19 @@ using System.Windows.Forms;
 
 namespace ADPSemesterProject
 {
-    public partial class ADPMainMenu : Form
+    public partial class OOPMainMenu : Form
     {
 
         public string username = "";
         public int accessLevel = 2;
         public string password = "";
         public Form parent;
-        //MongoDB connection
         public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
         public static IMongoDatabase db = dbClient.GetDatabase("semester");
         static IMongoCollection<Menu> menuCollection = db.GetCollection<Menu>("menu");
         static IMongoCollection<Orders> ordersCollection = db.GetCollection<Orders>("orders");
         static IMongoCollection<Staff> staffCollection = db.GetCollection<Staff>("staff");
         static IMongoCollection<Tables> tablesCollection = db.GetCollection<Tables>("tables");
-
         //These classes are my collection definitions
         class Menu
         {
@@ -82,7 +80,7 @@ namespace ADPSemesterProject
             public int OrderID { get; set; }
 
         }
-        public ADPMainMenu(string username, int accessLevel, string password, Form parent)
+        public OOPMainMenu(string username, int accessLevel, string password, Form parent)
         {
             InitializeComponent();
             this.username = username;

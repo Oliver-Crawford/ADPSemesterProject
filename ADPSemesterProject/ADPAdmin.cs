@@ -51,8 +51,6 @@ namespace ADPSemesterProject
             [BsonId]
             public ObjectId ID { get; set; }
             [BsonElement("ItemsOrdered")]
-            public List<string> ItemsOrdered { get; set; }
-            [BsonElement("TotalCost")]
             public double TotalCost { get; set; }
         }
         class Staff
@@ -77,9 +75,22 @@ namespace ADPSemesterProject
             public string TableStatus { get; set; }
             [BsonElement("OrderStatus")]
             public string OrderStatus { get; set; }
-            [ForeignKey("OrderID")]
-            public int OrderID { get; set; }
+            [ForeignKey("OrdersForeignKey")]
+            public ObjectId OrdersForeignKey { get; set; }
 
+        }
+        class ItemsOrdered
+        {
+            [BsonId]
+            public ObjectId ID { get; set; }
+            [BsonElement("Name")]
+            public string Name { get; set; }
+            [BsonElement("Discounted")]
+            public bool Discounted { get; set; }
+            [BsonElement("Cost")]
+            public double Cost { get; set; }
+            [ForeignKey("OrdersForeignKey")]
+            public ObjectId OrdersForeignKey { get; set; }
         }
 
         public ADPAdmin(string username, int accessLevel, string password, Form parent)
