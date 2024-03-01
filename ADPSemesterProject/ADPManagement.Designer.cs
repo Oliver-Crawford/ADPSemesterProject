@@ -50,6 +50,14 @@
             chkBDiscounted = new CheckBox();
             btnReadOrderItems = new Button();
             label5 = new Label();
+            btnTableRead = new Button();
+            label6 = new Label();
+            txtBTableStatus = new TextBox();
+            label7 = new Label();
+            txtBTableOrderStatus = new TextBox();
+            label8 = new Label();
+            txtBTableOrderId = new TextBox();
+            label9 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -254,11 +262,86 @@
             label5.TabIndex = 80;
             label5.Text = "View items by ID";
             // 
+            // btnTableRead
+            // 
+            btnTableRead.Location = new Point(688, 173);
+            btnTableRead.Name = "btnTableRead";
+            btnTableRead.Size = new Size(75, 23);
+            btnTableRead.TabIndex = 82;
+            btnTableRead.Text = "Read";
+            btnTableRead.UseVisualStyleBackColor = true;
+            btnTableRead.Click += btnTableRead_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(609, 177);
+            label6.Name = "label6";
+            label6.Size = new Size(39, 15);
+            label6.TabIndex = 81;
+            label6.Text = "Tables";
+            // 
+            // txtBTableStatus
+            // 
+            txtBTableStatus.Location = new Point(688, 202);
+            txtBTableStatus.Name = "txtBTableStatus";
+            txtBTableStatus.Size = new Size(100, 23);
+            txtBTableStatus.TabIndex = 84;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(609, 205);
+            label7.Name = "label7";
+            label7.Size = new Size(69, 15);
+            label7.TabIndex = 83;
+            label7.Text = "Table Status";
+            // 
+            // txtBTableOrderStatus
+            // 
+            txtBTableOrderStatus.Location = new Point(688, 231);
+            txtBTableOrderStatus.Name = "txtBTableOrderStatus";
+            txtBTableOrderStatus.Size = new Size(100, 23);
+            txtBTableOrderStatus.TabIndex = 86;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(609, 234);
+            label8.Name = "label8";
+            label8.Size = new Size(72, 15);
+            label8.TabIndex = 85;
+            label8.Text = "Order Status";
+            // 
+            // txtBTableOrderId
+            // 
+            txtBTableOrderId.Location = new Point(688, 260);
+            txtBTableOrderId.Name = "txtBTableOrderId";
+            txtBTableOrderId.Size = new Size(100, 23);
+            txtBTableOrderId.TabIndex = 88;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(609, 263);
+            label9.Name = "label9";
+            label9.Size = new Size(51, 15);
+            label9.TabIndex = 87;
+            label9.Text = "Order ID";
+            // 
             // ADPManagement
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(txtBTableOrderId);
+            Controls.Add(label9);
+            Controls.Add(txtBTableOrderStatus);
+            Controls.Add(label8);
+            Controls.Add(txtBTableStatus);
+            Controls.Add(label7);
+            Controls.Add(btnTableRead);
+            Controls.Add(label6);
             Controls.Add(label5);
             Controls.Add(btnReadOrderItems);
             Controls.Add(chkBDiscounted);
@@ -312,5 +395,13 @@
         private CheckBox chkBDiscounted;
         private Button btnReadOrderItems;
         private Label label5;
+        private Button btnTableRead;
+        private Label label6;
+        private TextBox txtBTableStatus;
+        private Label label7;
+        private TextBox txtBTableOrderStatus;
+        private Label label8;
+        private TextBox txtBTableOrderId;
+        private Label label9;
     }
 }

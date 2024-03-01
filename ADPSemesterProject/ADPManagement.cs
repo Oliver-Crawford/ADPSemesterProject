@@ -89,7 +89,7 @@ namespace ADPSemesterProject
             [BsonElement("Discounted")]
             public bool Discounted { get; set; }
             [BsonElement("Cost")]
-            public double Cost {  get; set; }
+            public double Cost { get; set; }
             [ForeignKey("OrdersForignKey")]
             public ObjectId OrdersForignKey { get; set; }
         }
@@ -132,6 +132,13 @@ namespace ADPSemesterProject
                 case "tablesCollection":
                     List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = tablesList;
+                    btnCreate.Enabled = true;
+                    btnUpdate.Enabled = true;
+                    btnDelete.Enabled = true;
+                    btnReadOrderItems.Enabled = false;
+                    btnOrderItemsCreate.Enabled = false;
+                    btnOrderItemsDelete.Enabled = false;
+                    chkBDiscounted.Enabled = false;
                     break;
                 case "filteredUsersProjectionManagement":
                     List<Staff> filteredUPM = staffCollection.Find("{}").Project<Staff>("{_id: 1, Name: 1, Role: 1}").ToList();
@@ -302,7 +309,7 @@ namespace ADPSemesterProject
                     //make sure the order you're deleting exists
                     var filterOrder = Builders<Orders>.Filter.Eq("ID", Id);
                     List<Orders> ordersList = ordersCollection.Find(filterOrder).ToList();
-                    if(ordersList.Count == 0)
+                    if (ordersList.Count == 0)
                     {
                         MessageBox.Show("Invalid Order ID");
                         break;
@@ -310,7 +317,7 @@ namespace ADPSemesterProject
                     //delete all the items ordered relating to this order
                     var filterGetItemsOrdered = Builders<ItemsOrdered>.Filter.Eq("OrdersForignKey", Id);
                     List<ItemsOrdered> itemsOrderedList = itemsOrderedCollection.Find(filterGetItemsOrdered).ToList();
-                    foreach(ItemsOrdered item in itemsOrderedList)
+                    foreach (ItemsOrdered item in itemsOrderedList)
                     {
                         var filterDeleteItem = Builders<ItemsOrdered>.Filter.Eq("ID", item.ID);
                         itemsOrderedCollection.DeleteOne(filterDeleteItem);
@@ -369,8 +376,8 @@ namespace ADPSemesterProject
                 //get the menu info, doing this first so if it doesn't exist then it won't insert bad data into the DB
                 var builderGetMenuInfo = Builders<Menu>.Filter;
                 var filterGetMenuInfo = builderGetMenuInfo.Eq("Name", txtBOrderItemsName.Text);
-                List<Menu>filteredMenuInfoList = menuCollection.Find(filterGetMenuInfo).Project<Menu>("{_id: -1, Cost: 1, Discount: 1}").ToList();
-                if(filteredMenuInfoList.Count == 0)
+                List<Menu> filteredMenuInfoList = menuCollection.Find(filterGetMenuInfo).Project<Menu>("{_id: -1, Cost: 1, Discount: 1}").ToList();
+                if (filteredMenuInfoList.Count == 0)
                 {
                     Exception thrown = new Exception("Bad Item Name");
                     throw thrown;
@@ -381,7 +388,7 @@ namespace ADPSemesterProject
                 var builderGetOrderInfo = Builders<Orders>.Filter;
                 var filterGetOrderInfo = builderGetOrderInfo.Eq("ID", newItemsOrdered.OrdersForignKey);
                 List<Orders> filteredOrderInfo = ordersCollection.Find(filterGetOrderInfo).ToList();
-                if(filteredOrderInfo.Count == 0)
+                if (filteredOrderInfo.Count == 0)
                 {
                     Exception thrown = new Exception("Order is missing");
                     throw thrown;
@@ -398,16 +405,17 @@ namespace ADPSemesterProject
                 newItemsOrdered.Cost = toAdd;
                 //after the cost is added to the object insert it
                 itemsOrderedCollection.InsertOne(newItemsOrdered);
-                
+
                 var filterUpdateTotalCost = Builders<Orders>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
                 var updateUpdateTotalCost = Builders<Orders>.Update.Set("TotalCost", total);
                 ordersCollection.UpdateOne(filterUpdateTotalCost, updateUpdateTotalCost);
                 DisplayContent("ordersCollection");
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
 
         private void btnOrderItemsDelete_Click(object sender, EventArgs e)
@@ -417,7 +425,7 @@ namespace ADPSemesterProject
                 //get the item that you want to delete
                 var filterGetItemOrdered = Builders<ItemsOrdered>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
                 List<ItemsOrdered> itemOrderedList = itemsOrderedCollection.Find(filterGetItemOrdered).ToList();
-                if(itemOrderedList.Count == 0)
+                if (itemOrderedList.Count == 0)
                 {
                     Exception thrown = new Exception("Bad ID");
                     throw thrown;
@@ -445,6 +453,13 @@ namespace ADPSemesterProject
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void btnTableRead_Click(object sender, EventArgs e)
+        {
+            DisplayContent("tablesCollection");
+            currentView = "tables";
+            lCurrentViewSelected.Text = "Tables is currently selected";
         }
     }
 }
