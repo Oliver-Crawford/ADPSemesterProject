@@ -143,11 +143,7 @@ namespace ADPSemesterProject
 
         }
 
-        //this is to actually close the program when Form2 is closed, otherwise it will just keep running without any UI.
-        private void Form2_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
-        }
+
 
         private void btnAdmin_Click(object sender, EventArgs e)
         {
@@ -173,6 +169,11 @@ namespace ADPSemesterProject
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             AccessLevelStartup(accessLevel);
+        }
+
+        private void OOPMainMenu_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
         }
     }
 }

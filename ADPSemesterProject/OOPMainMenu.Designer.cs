@@ -97,6 +97,7 @@
             Controls.Add(btnAdmin);
             Name = "OOPMainMenu";
             Text = "OOPMainMenu";
+            FormClosed += OOPMainMenu_FormClosed;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
