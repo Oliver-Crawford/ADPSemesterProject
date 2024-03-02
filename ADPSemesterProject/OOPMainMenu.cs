@@ -96,13 +96,28 @@ namespace ADPSemesterProject
             switch (collectionName)
             {
                 case "menuCollection":
-
-
-                    dataGridView1.DataSource = ;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from menu";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        conn.Close();
+                    }
+                    dataGridView1.DataSource = dt;
+                    dt.Clear();
                     break;
                 case "ordersCollection":
-
-                    dataGridView1.DataSource = ;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from orders";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        conn.Close();
+                    }
+                    dataGridView1.DataSource = dt;
+                    dt.Clear();
                     break;
                 case "staffCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -117,7 +132,16 @@ namespace ADPSemesterProject
                     dt.Clear();
                     break;
                 case "tablesCollection":
-                    dataGridView1.DataSource = ;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from tables";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        conn.Close();
+                    }
+                    dataGridView1.DataSource = dt;
+                    dt.Clear();
                     break;
                 case "filteredSCUserOnly":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
