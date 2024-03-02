@@ -55,6 +55,7 @@
             btnStaff.TabIndex = 10;
             btnStaff.Text = "Staff";
             btnStaff.UseVisualStyleBackColor = true;
+            btnStaff.Click += btnStaff_Click;
             // 
             // btnManagement
             // 

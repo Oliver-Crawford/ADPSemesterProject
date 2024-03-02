@@ -138,20 +138,6 @@ namespace ADPSemesterProject
 
         }
 
-
-
-
-
-
-        private void btnStaff_Click(object sender, EventArgs e)
-        {
-            ADPStaff ADPStaff = new ADPStaff(username, accessLevel, password, this);
-            this.Hide();
-            ADPStaff.Show();
-        }
-
-
-
         private void OOPMainMenu_FormClosed(object sender, FormClosedEventArgs e)
         {
             parent.Show();
@@ -170,10 +156,18 @@ namespace ADPSemesterProject
             this.Hide();
             ADPManagement.Show();
         }
+        private void btnStaff_Click(object sender, EventArgs e)
+        {
+            ADPStaff ADPStaff = new ADPStaff(username, accessLevel, password, this);
+            this.Hide();
+            ADPStaff.Show();
+        }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             AccessLevelStartup(accessLevel);
         }
+
+        
     }
 }
