@@ -102,10 +102,10 @@ namespace ADPSemesterProject
                         conn.Open();
                         SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                         ad.Fill(dt);
-                        conn.Close();
+                        ad.Dispose();
                     }
+                    conn.Close();
                     dataGridView1.DataSource = dt;
-                    dt.Clear();
                     break;
                 case "ordersCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -114,10 +114,10 @@ namespace ADPSemesterProject
                         conn.Open();
                         SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                         ad.Fill(dt);
-                        conn.Close();
+                        ad.Dispose();
                     }
+                    conn.Close();
                     dataGridView1.DataSource = dt;
-                    dt.Clear();
                     break;
                 case "staffCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -126,10 +126,10 @@ namespace ADPSemesterProject
                         conn.Open();
                         SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                         ad.Fill(dt);
-                        conn.Close();
+                        ad.Dispose();
                     }
+                    conn.Close();
                     dataGridView1.DataSource = dt;
-                    dt.Clear();
                     break;
                 case "tablesCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -138,10 +138,10 @@ namespace ADPSemesterProject
                         conn.Open();
                         SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                         ad.Fill(dt);
-                        conn.Close();
+                        ad.Dispose();
                     }
+                    conn.Close();
                     dataGridView1.DataSource = dt;
-                    dt.Clear();
                     break;
                 case "filteredSCUserOnly":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -150,10 +150,10 @@ namespace ADPSemesterProject
                         conn.Open();
                         SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                         ad.Fill(dt);
-                        conn.Close();
+                        ad.Dispose();
                     }
+                    conn.Close();
                     dataGridView1.DataSource = dt;
-                    dt.Clear();
                     break;
                 default:
                     MessageBox.Show("No known collection called " + collectionName);
