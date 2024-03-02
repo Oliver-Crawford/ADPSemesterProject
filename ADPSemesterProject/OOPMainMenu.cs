@@ -130,11 +130,6 @@ namespace ADPSemesterProject
                     }
                     dataGridView1.DataSource = dt;
                     dt.Clear();
-                    /*
-                    var builderC2 = Builders<Staff>.Filter;
-                    var filterC2 = builderC2.Eq("Name", username) & builderC2.Eq("Password", password);
-                    List<Staff> filteredUserOnlyList = staffCollection.Find(filterC2).ToList();
-                    */
                     break;
                 default:
                     MessageBox.Show("No known collection called " + collectionName);
@@ -144,6 +139,23 @@ namespace ADPSemesterProject
         }
 
 
+
+
+
+
+        private void btnStaff_Click(object sender, EventArgs e)
+        {
+            ADPStaff ADPStaff = new ADPStaff(username, accessLevel, password, this);
+            this.Hide();
+            ADPStaff.Show();
+        }
+
+
+
+        private void OOPMainMenu_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
+        }
 
         private void btnAdmin_Click(object sender, EventArgs e)
         {
@@ -159,21 +171,9 @@ namespace ADPSemesterProject
             ADPManagement.Show();
         }
 
-        private void btnStaff_Click(object sender, EventArgs e)
-        {
-            ADPStaff ADPStaff = new ADPStaff(username, accessLevel, password, this);
-            this.Hide();
-            ADPStaff.Show();
-        }
-
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             AccessLevelStartup(accessLevel);
-        }
-
-        private void OOPMainMenu_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
         }
     }
 }

@@ -44,6 +44,7 @@
             btnRefresh.TabIndex = 11;
             btnRefresh.Text = "Refresh";
             btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click;
             // 
             // btnStaff
             // 
@@ -65,6 +66,7 @@
             btnManagement.TabIndex = 9;
             btnManagement.Text = "Management";
             btnManagement.UseVisualStyleBackColor = true;
+            btnManagement.Click += btnManagement_Click;
             // 
             // dataGridView1
             // 
@@ -84,6 +86,7 @@
             btnAdmin.TabIndex = 7;
             btnAdmin.Text = "Admin";
             btnAdmin.UseVisualStyleBackColor = true;
+            btnAdmin.Click += btnAdmin_Click;
             // 
             // OOPMainMenu
             // 
