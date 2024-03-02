@@ -79,30 +79,68 @@ namespace ADPSemesterProject
         //Displays table contents based on the given collection name
         public void DisplayContent(string collectionName)
         {
+            DataTable dt = new DataTable();
             switch (collectionName)
             {
                 case "menuCollection":
-                    List<Menu> menuList = menuCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = menuList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from menu";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     break;
                 case "ordersCollection":
-                    List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = ordersList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from orders";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     break;
                 case "staffCollection":
-                    List<Staff> staffList = staffCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = staffList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from staff";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     break;
                 case "tablesCollection":
-                    List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = tablesList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from tables";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     break;
                 case "filteredSCUserOnly":
-                    var builderC2 = Builders<Staff>.Filter;
-                    var filterC2 = builderC2.Eq("Name", username) & builderC2.Eq("Password", password);
-                    List<Staff> filteredUserOnlyList = staffCollection.Find(filterC2).ToList();
-                    dataGridView1.DataSource = filteredUserOnlyList;
-
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     break;
                 default:
                     MessageBox.Show("No known collection called " + collectionName);
