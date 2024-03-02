@@ -97,6 +97,7 @@
             btnCreate.TabIndex = 62;
             btnCreate.Text = "Create";
             btnCreate.UseVisualStyleBackColor = true;
+            btnCreate.Click += btnCreate_Click;
             // 
             // lCurrentViewSelected
             // 

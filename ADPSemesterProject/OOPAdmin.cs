@@ -277,56 +277,7 @@ namespace ADPSemesterProject
 
         }
 
-        private void btnCreate_Click(object sender, EventArgs e)
-        {
-            if (currentView)
-            {
-                //inserts new users record
-                int tryParseAccess = -1;
-                if (int.TryParse(txtBUsersAccessLevel.Text, out tryParseAccess))
-                {
-                    if (tryParseAccess > -1 && tryParseAccess < 3)
-                    {
-                        Staff newUser = new Staff() { Name = txtBUsersName.Text, Password = txtBUsersPassword.Text, Role = txtBUsersRole.Text, AccessLevel = tryParseAccess };
-                        staffCollection.InsertOne(newUser);
-                        DisplayContent("staffCollection");
-                    }
-                    else
-                    {
-                        DisplayError("accessLevelOutOfRangeError");
-                    }
 
-                }
-                else
-                {
-                    DisplayError("accessLevelParseError");
-                }
-            }
-            else
-            {
-                //inserts new menu record
-                double tryParseCost = 0.0;
-                double tryParseDiscount = 0.0;
-                if (!double.TryParse(txtBMenuCost.Text, out tryParseCost))
-                {
-                    DisplayError("menuCostParseError");
-                    return;
-                }
-                if (!double.TryParse(txtBMenuDiscount.Text, out tryParseDiscount))
-                {
-                    DisplayError("menuDiscountParseError");
-                    return;
-                }
-                if (tryParseDiscount > 1)
-                {
-                    DisplayError("menuDiscountOutOfRangeError");
-                    return;
-                }
-                Menu newMenu = new Menu() { Name = txtBMenuName.Text, Cost = tryParseCost, Discount = tryParseDiscount, Category = txtBMenuCategory.Text, Description = txtBMenuDescription.Text };
-                menuCollection.InsertOne(newMenu);
-                DisplayContent("menuCollection");
-            }
-        }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
@@ -410,6 +361,67 @@ namespace ADPSemesterProject
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = $"delete from menu where id = {id}";
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+                DisplayContent("menuCollection");
+            }
+        }
+
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+            if (currentView)
+            {
+                //inserts new users record
+                int tryParseAccess = -1;
+                if (int.TryParse(txtBUsersAccessLevel.Text, out tryParseAccess))
+                {
+                    if (tryParseAccess > -1 && tryParseAccess < 3)
+                    {
+                        using(var cmd = new SQLiteCommand(conn))
+                        {
+                            cmd.CommandText = $"insert into staff (Name, Password, Role, AccessLevel) Values ('{txtBUsersName.Text}', '{txtBUsersPassword.Text}', '{txtBUsersRole.Text}', {tryParseAccess});";
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                        conn.Close();
+                        DisplayContent("staffCollection");
+                    }
+                    else
+                    {
+                        DisplayError("accessLevelOutOfRangeError");
+                    }
+
+                }
+                else
+                {
+                    DisplayError("accessLevelParseError");
+                }
+            }
+            else
+            {
+                //inserts new menu record
+                double tryParseCost = 0.0;
+                double tryParseDiscount = 0.0;
+                if (!double.TryParse(txtBMenuCost.Text, out tryParseCost))
+                {
+                    DisplayError("menuCostParseError");
+                    return;
+                }
+                if (!double.TryParse(txtBMenuDiscount.Text, out tryParseDiscount))
+                {
+                    DisplayError("menuDiscountParseError");
+                    return;
+                }
+                if (tryParseDiscount > 1)
+                {
+                    DisplayError("menuDiscountOutOfRangeError");
+                    return;
+                }
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = $"insert into menu (Name, Cost, Discount, Category, Description) Values ('{txtBMenuName.Text}', {tryParseCost}, {tryParseDiscount}, '{txtBMenuCategory.Text}', '{txtBMenuDescription.Text}');";
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
