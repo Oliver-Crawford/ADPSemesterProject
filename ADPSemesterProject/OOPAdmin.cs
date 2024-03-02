@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection.Metadata.Ecma335;
 using System.Data.SQLite;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace ADPSemesterProject
 {
@@ -149,7 +151,7 @@ namespace ADPSemesterProject
 
         }
 
-        public void DisplayError(string er)
+        public void DisplayError(string er, string passthrough = "")
         {
             switch (er)
             {
@@ -168,12 +170,20 @@ namespace ADPSemesterProject
                 case "menuDiscountOutOfRangeError":
                     MessageBox.Show("Discount can't be greater than 1!");
                     break;
+                case "unknownSelection":
+                    MessageBox.Show($"Unkown selection made: {passthrough}");
+                    break;
+                case "invalidID":
+                    MessageBox.Show($"invalid ID: {passthrough}");
+                    break;
+
                 default:
                     MessageBox.Show($"Unknown error: {er}");
                     break;
 
             }
         }
+
 
 
 
@@ -366,27 +376,46 @@ namespace ADPSemesterProject
             }
         }
 
+
+
+        private void OOPAdmin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
+        }
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            DataTable dt = new DataTable();
+            int id = -1;
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
             if (currentView)
             {
                 //for Users
-                var filter = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                staffCollection.DeleteOne(filter);
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = $"delete from staff where id = {id}";
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
                 DisplayContent("staffCollection");
             }
             else
             {
                 //for Menu
-                var filter = Builders<Menu>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                menuCollection.DeleteOne(filter);
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = $"delete from menu where id = {id}";
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
                 DisplayContent("menuCollection");
             }
-        }
-
-        private void OOPAdmin_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
         }
     }
 }

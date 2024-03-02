@@ -138,7 +138,7 @@ namespace ADPSemesterProject
 
         }
 
-        public void DisplayError(string er)
+        public void DisplayError(string er, string passthrough = "")
         {
             switch (er)
             {
@@ -157,6 +157,13 @@ namespace ADPSemesterProject
                 case "menuDiscountOutOfRangeError":
                     MessageBox.Show("Discount can't be greater than 1!");
                     break;
+                case "unknownSelection":
+                    MessageBox.Show($"Unkown selection made: {passthrough}");
+                    break;
+                case "invalidID":
+                    MessageBox.Show($"invalid ID: {passthrough}");
+                    break;
+
                 default:
                     MessageBox.Show($"Unknown error: {er}");
                     break;
