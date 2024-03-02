@@ -1,8 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
-using MongoDB.Driver.Core.Authentication;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +9,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SQLite;
+using System.Xml.Linq;
+using System.Data.Common;
 
 namespace ADPSemesterProject
 {
@@ -23,60 +22,38 @@ namespace ADPSemesterProject
         public int accessLevel = 2;
         public string password = "";
         public Form parent;
-        public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
-        public static IMongoDatabase db = dbClient.GetDatabase("semester");
-        static IMongoCollection<Menu> menuCollection = db.GetCollection<Menu>("menu");
-        static IMongoCollection<Orders> ordersCollection = db.GetCollection<Orders>("orders");
-        static IMongoCollection<Staff> staffCollection = db.GetCollection<Staff>("staff");
-        static IMongoCollection<Tables> tablesCollection = db.GetCollection<Tables>("tables");
+
+        public SQLiteConnection conn = new SQLiteConnection("Data Source=semester.db;");
+
         //These classes are my collection definitions
         class Menu
         {
-            [BsonId]
-            public BsonObjectId ID { get; set; }
-            [BsonElement("Name")]
+            public int ID { get; set; }
             public string Name { get; set; }
-            [BsonElement("Cost")]
             public double Cost { get; set; }
-            [BsonElement("Discount")]
             public double Discount { get; set; }
-            [BsonElement("Category")]
             public string Category { get; set; }
-            [BsonElement("Description")]
             public string Description { get; set; }
         }
         class Orders
         {
-            [BsonId]
-            public BsonObjectId ID { get; set; }
-            [BsonElement("ItemsOrdered")]
-            public List<string> ItemsOrdered { get; set; }
-            [BsonElement("TotalCost")]
+            public int ID { get; set; }
             public double TotalCost { get; set; }
         }
         class Staff
         {
-            [BsonId]
-            public BsonObjectId ID { get; set; }
-            [BsonElement("Name")]
+            public int ID { get; set; }
             public string Name { get; set; }
-            [BsonElement("Password")]
             public string Password { get; set; }
-            [BsonElement("Role")]
             public string Role { get; set; }
-            [BsonElement("AccessLevel")]
             public int AccessLevel { get; set; }
 
         }
         class Tables
         {
-            [BsonId]
-            public BsonObjectId ID { get; set; }
-            [BsonElement("TableStatus")]
+            public int ID { get; set; }
             public string TableStatus { get; set; }
-            [BsonElement("OrderStatus")]
             public string OrderStatus { get; set; }
-            [ForeignKey("OrderID")]
             public int OrderID { get; set; }
 
         }
@@ -115,30 +92,49 @@ namespace ADPSemesterProject
         }
         public void DisplayContent(string collectionName)
         {
+            DataTable dt = new DataTable();
             switch (collectionName)
             {
                 case "menuCollection":
-                    List<Menu> menuList = menuCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = menuList;
+
+
+                    dataGridView1.DataSource = ;
                     break;
                 case "ordersCollection":
-                    List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = ordersList;
+
+                    dataGridView1.DataSource = ;
                     break;
                 case "staffCollection":
-                    List<Staff> staffList = staffCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = staffList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from staff";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        conn.Close();
+                    }
+                    dataGridView1.DataSource = dt;
+                    dt.Clear();
                     break;
                 case "tablesCollection":
-                    List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = tablesList;
+                    dataGridView1.DataSource = ;
                     break;
                 case "filteredSCUserOnly":
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        conn.Close();
+                    }
+                    dataGridView1.DataSource = dt;
+                    dt.Clear();
+                    /*
                     var builderC2 = Builders<Staff>.Filter;
                     var filterC2 = builderC2.Eq("Name", username) & builderC2.Eq("Password", password);
                     List<Staff> filteredUserOnlyList = staffCollection.Find(filterC2).ToList();
-                    dataGridView1.DataSource = filteredUserOnlyList;
-
+                    */
                     break;
                 default:
                     MessageBox.Show("No known collection called " + collectionName);

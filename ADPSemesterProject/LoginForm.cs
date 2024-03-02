@@ -11,6 +11,7 @@ namespace ADPSemesterProject
 {
     public partial class LoginForm : Form
     {
+        //MongoDB connection
         public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
         public static IMongoDatabase db = dbClient.GetDatabase("semester");
         static IMongoCollection<MongoStaff> staffCollection = db.GetCollection<MongoStaff>("staff");
