@@ -347,6 +347,7 @@
             Controls.Add(dataGridView1);
             Name = "OOPAdmin";
             Text = "OOPAdmin";
+            FormClosed += OOPAdmin_FormClosed;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();

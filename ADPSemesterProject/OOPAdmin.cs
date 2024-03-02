@@ -175,10 +175,7 @@ namespace ADPSemesterProject
             }
         }
 
-        private void ADPAdmin_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
-        }
+
 
         private void btnUsersRead_Click(object sender, EventArgs e)
         {
@@ -385,6 +382,11 @@ namespace ADPSemesterProject
                 menuCollection.DeleteOne(filter);
                 DisplayContent("menuCollection");
             }
+        }
+
+        private void OOPAdmin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
         }
     }
 }
