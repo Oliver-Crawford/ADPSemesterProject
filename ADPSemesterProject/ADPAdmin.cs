@@ -367,17 +367,23 @@ namespace ADPSemesterProject
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            ObjectId id;
+            if (!ObjectId.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
             if (currentView)
             {
                 //for Users
-                var filter = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                var filter = Builders<Staff>.Filter.Eq("ID", id);
                 staffCollection.DeleteOne(filter);
                 DisplayContent("staffCollection");
             }
             else
             {
                 //for Menu
-                var filter = Builders<Menu>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                var filter = Builders<Menu>.Filter.Eq("ID", id);
                 menuCollection.DeleteOne(filter);
                 DisplayContent("menuCollection");
             }
