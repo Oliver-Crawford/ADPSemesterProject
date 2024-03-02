@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,22 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection.Metadata.Ecma335;
-using Amazon.Runtime;
+using System.Data.SQLite;
 
 namespace ADPSemesterProject
 {
-    public partial class ADPAdmin : Form
+    public partial class OOPAdmin : Form
     {
         public string username = "";
         public int accessLevel = 2;
         public string password = "";
         public Form parent;
-        public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
-        public static IMongoDatabase db = dbClient.GetDatabase("semester");
-        static IMongoCollection<Menu> menuCollection = db.GetCollection<Menu>("menu");
-        static IMongoCollection<Orders> ordersCollection = db.GetCollection<Orders>("orders");
-        static IMongoCollection<Staff> staffCollection = db.GetCollection<Staff>("staff");
-        static IMongoCollection<Tables> tablesCollection = db.GetCollection<Tables>("tables");
+
+        public SQLiteConnection conn = new SQLiteConnection("Data Source=semester.db;");
+
         //true is users, false is menu.
         bool currentView = true;
 

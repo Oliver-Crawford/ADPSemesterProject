@@ -26,37 +26,6 @@ namespace ADPSemesterProject
         public SQLiteConnection conn = new SQLiteConnection("Data Source=semester.db;");
 
         //These classes are my collection definitions
-        class Menu
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public double Cost { get; set; }
-            public double Discount { get; set; }
-            public string Category { get; set; }
-            public string Description { get; set; }
-        }
-        class Orders
-        {
-            public int ID { get; set; }
-            public double TotalCost { get; set; }
-        }
-        class Staff
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public string Password { get; set; }
-            public string Role { get; set; }
-            public int AccessLevel { get; set; }
-
-        }
-        class Tables
-        {
-            public int ID { get; set; }
-            public string TableStatus { get; set; }
-            public string OrderStatus { get; set; }
-            public int OrderID { get; set; }
-
-        }
         public OOPMainMenu(string username, int accessLevel, string password, Form parent)
         {
             InitializeComponent();
