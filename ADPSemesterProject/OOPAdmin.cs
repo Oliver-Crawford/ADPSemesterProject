@@ -279,53 +279,7 @@ namespace ADPSemesterProject
 
 
 
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            if (currentView)
-            {
-                //for Users
-                int tryParseAccessLevel = -1;
-                if (!int.TryParse(txtBUsersAccessLevel.Text, out tryParseAccessLevel))
-                {
-                    DisplayError("accessLevelParseError");
-                    return;
-                }
-                if (tryParseAccessLevel < 0 || tryParseAccessLevel > 2)
-                {
-                    DisplayError("accessLevelOutOfRangeError");
-                    return;
-                }
-                var filter = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                var update = Builders<Staff>.Update.Set("Name", txtBUsersName.Text).Set("Password", txtBUsersPassword.Text).Set("Role", txtBUsersRole.Text).Set("AccessLevel", tryParseAccessLevel);
-                staffCollection.UpdateOne(filter, update);
-                DisplayContent("staffCollection");
-            }
-            else
-            {
-                //for Menu
-                double tryParseCost = 0.0;
-                double tryParseDiscount = 0.0;
-                if (!double.TryParse(txtBMenuCost.Text, out tryParseCost))
-                {
-                    DisplayError("menuCostParseError");
-                    return;
-                }
-                if (!double.TryParse(txtBMenuDiscount.Text, out tryParseDiscount))
-                {
-                    DisplayError("menuDiscountParseError");
-                    return;
-                }
-                if (tryParseDiscount > 1)
-                {
-                    DisplayError("menuDiscountOutOfRangeError");
-                    return;
-                }
-                var filter = Builders<Menu>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                var update = Builders<Menu>.Update.Set("Name", txtBMenuName.Text).Set("Cost", tryParseCost).Set("Discount", tryParseDiscount).Set("Category", txtBMenuCategory.Text).Set("Description", txtBMenuDescription.Text);
-                menuCollection.UpdateOne(filter, update);
-                DisplayContent("menuCollection");
-            }
-        }
+
 
 
 
@@ -379,7 +333,7 @@ namespace ADPSemesterProject
                 {
                     if (tryParseAccess > -1 && tryParseAccess < 3)
                     {
-                        using(var cmd = new SQLiteCommand(conn))
+                        using (var cmd = new SQLiteCommand(conn))
                         {
                             cmd.CommandText = $"insert into staff (Name, Password, Role, AccessLevel) Values ('{txtBUsersName.Text}', '{txtBUsersPassword.Text}', '{txtBUsersRole.Text}', {tryParseAccess});";
                             conn.Open();
@@ -426,6 +380,55 @@ namespace ADPSemesterProject
                     cmd.ExecuteNonQuery();
                 }
                 conn.Close();
+                DisplayContent("menuCollection");
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (currentView)
+            {
+                //for Users
+                int tryParseAccessLevel = -1;
+                if (!int.TryParse(txtBUsersAccessLevel.Text, out tryParseAccessLevel))
+                {
+                    DisplayError("accessLevelParseError");
+                    return;
+                }
+                if (tryParseAccessLevel < 0 || tryParseAccessLevel > 2)
+                {
+                    DisplayError("accessLevelOutOfRangeError");
+                    return;
+                }
+                var filter = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                var update = Builders<Staff>.Update.Set("Name", txtBUsersName.Text).Set("Password", txtBUsersPassword.Text).Set("Role", txtBUsersRole.Text).Set("AccessLevel", tryParseAccessLevel);
+                staffCollection.UpdateOne(filter, update);
+
+                DisplayContent("staffCollection");
+            }
+            else
+            {
+                //for Menu
+                double tryParseCost = 0.0;
+                double tryParseDiscount = 0.0;
+                if (!double.TryParse(txtBMenuCost.Text, out tryParseCost))
+                {
+                    DisplayError("menuCostParseError");
+                    return;
+                }
+                if (!double.TryParse(txtBMenuDiscount.Text, out tryParseDiscount))
+                {
+                    DisplayError("menuDiscountParseError");
+                    return;
+                }
+                if (tryParseDiscount > 1)
+                {
+                    DisplayError("menuDiscountOutOfRangeError");
+                    return;
+                }
+                var filter = Builders<Menu>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                var update = Builders<Menu>.Update.Set("Name", txtBMenuName.Text).Set("Cost", tryParseCost).Set("Discount", tryParseDiscount).Set("Category", txtBMenuCategory.Text).Set("Description", txtBMenuDescription.Text);
+                menuCollection.UpdateOne(filter, update);
                 DisplayContent("menuCollection");
             }
         }

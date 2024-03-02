@@ -319,6 +319,12 @@ namespace ADPSemesterProject
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            ObjectId id;
+            if(!ObjectId.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
             if (currentView)
             {
                 //for Users
@@ -333,7 +339,7 @@ namespace ADPSemesterProject
                     DisplayError("accessLevelOutOfRangeError");
                     return;
                 }
-                var filter = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                var filter = Builders<Staff>.Filter.Eq("ID", id);
                 var update = Builders<Staff>.Update.Set("Name", txtBUsersName.Text).Set("Password", txtBUsersPassword.Text).Set("Role", txtBUsersRole.Text).Set("AccessLevel", tryParseAccessLevel);
                 staffCollection.UpdateOne(filter, update);
                 DisplayContent("staffCollection");
@@ -358,7 +364,7 @@ namespace ADPSemesterProject
                     DisplayError("menuDiscountOutOfRangeError");
                     return;
                 }
-                var filter = Builders<Menu>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                var filter = Builders<Menu>.Filter.Eq("ID", id);
                 var update = Builders<Menu>.Update.Set("Name", txtBMenuName.Text).Set("Cost", tryParseCost).Set("Discount", tryParseDiscount).Set("Category", txtBMenuCategory.Text).Set("Description", txtBMenuDescription.Text);
                 menuCollection.UpdateOne(filter, update);
                 DisplayContent("menuCollection");
