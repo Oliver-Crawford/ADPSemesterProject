@@ -212,33 +212,6 @@ namespace ADPSemesterProject
 
 
 
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            switch (currentView)
-            {
-                case "tables":
-                    ObjectId id;
-                    if (!ObjectId.TryParse(txtBID.Text, out id))
-                    {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
-                    }
-                    var filterTables = Builders<Tables>.Filter.Eq("ID", id);
-                    var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
-                    ObjectId foreignKey;
-                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
-                    {
-                        updateTables.Set("OrdersForeignKey", foreignKey);
-                    }
-                    tablesCollection.UpdateOne(filterTables, updateTables);
-                    DisplayContent("tablesCollection");
-                    break;
-
-                default:
-                    DisplayErrorUnknownSelectionHandler(e);
-                    break;
-            }
-        }
 
         private void btnOrderItemsCreate_Click(object sender, EventArgs e)
         {
@@ -502,6 +475,35 @@ namespace ADPSemesterProject
 
             }
         }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            int id;
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            switch (currentView)
+            {
+                case "tables":
+                    int foreignKey = -1;
+                    int.TryParse(txtBTableOrderId.Text, out foreignKey);
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"update tables set TableStatus = '{txtBTableStatus.Text}', OrderStatus = '{txtBTableOrderStatus.Text}', OrdersId = {foreignKey} where _id = {id};";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    DisplayContent("tablesCollection");
+                    break;
+
+                default:
+                    DisplayErrorUnknownSelectionHandler(e);
+                    break;
+            }
+        }
     }
 }
-}
+
