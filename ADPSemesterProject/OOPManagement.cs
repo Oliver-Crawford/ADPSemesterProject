@@ -43,19 +43,6 @@ namespace ADPSemesterProject
             DataTable dt = new DataTable();
             switch (collectionName)
             {
-                case "menuCollection":
-
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from orders";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
                 case "ordersCollection":
                     currentView = "order";
                     lCurrentViewSelected.Text = "Orders is currently selected";
@@ -76,20 +63,6 @@ namespace ADPSemesterProject
                     btnOrderItemsCreate.Enabled = false;
                     btnOrderItemsDelete.Enabled = false;
                     chkBDiscounted.Enabled = false;
-                    break;
-                case "staffCollection":
-                    currentView = "user";
-                    lCurrentViewSelected.Text = "Users is currently selected";
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from staff";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
                     break;
                 case "tablesCollection":
                     currentView = "tables";
