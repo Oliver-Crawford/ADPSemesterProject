@@ -232,66 +232,6 @@ namespace ADPSemesterProject
             DisplayContent("itemsOrderedCollection");
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            //This is to handle if the user clicks the column selecter, which doesn't have any use here.
-            if (e.RowIndex == -1)
-            {
-                return;
-            }
-            switch (currentView)
-            {
-                case "order":
-                    txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                    txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                    break;
-                case "itemsordered":
-                    switch (e.ColumnIndex)
-                    {
-                        case 0:
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                            break;
-                        case 1:
-                            txtBOrderItemsName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                            break;
-                        case 2:
-                            chkBDiscounted.Checked = bool.Parse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
-                            break;
-                        case 3:
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                            break;
-                    }
-                    break;
-                case "tables":
-                    switch (e.ColumnIndex)
-                    {
-                        case 0:
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                            break;
-                        case 1:
-                            txtBTableStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                            break;
-                        case 2:
-                            txtBTableOrderStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                            break;
-                        case 3:
-                            txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                            break;
-                        case -1:
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                            txtBTableStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                            txtBTableOrderStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                            txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
@@ -484,6 +424,72 @@ namespace ADPSemesterProject
         private void OOPStaff_FormClosed(object sender, FormClosedEventArgs e)
         {
             parent.Show();
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //This is to handle if the user clicks the column selecter, which doesn't have any use here.
+            if (e.RowIndex == -1)
+            {
+                return;
+            }
+            switch (currentView)
+            {
+                case "order":
+                    txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                    txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                    break;
+                case "itemsordered":
+                    switch (e.ColumnIndex)
+                    {
+                        case 0:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                            break;
+                        case 1:
+                            txtBOrderItemsName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            break;
+                        case 2:
+                            chkBDiscounted.Checked = bool.Parse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
+                            break;
+                        case 3:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            break;
+                        case -1:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                            txtBOrderItemsName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            chkBDiscounted.Checked = bool.Parse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
+                            break;
+                    }
+                    break;
+                case "tables":
+                    switch (e.ColumnIndex)
+                    {
+                        case 0:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                            break;
+                        case 1:
+                            txtBTableStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            break;
+                        case 2:
+                            txtBTableOrderStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                            break;
+                        case 3:
+                            txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            break;
+                        case -1:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                            txtBTableStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            txtBTableOrderStatus.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                            txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
