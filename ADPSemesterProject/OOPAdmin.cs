@@ -194,12 +194,7 @@ namespace ADPSemesterProject
             lCurrentViewSelected.Text = "Users is currently selected";
         }
 
-        private void btnMenuRead_Click(object sender, EventArgs e)
-        {
-            DisplayContent("menuCollection");
-            currentView = false;
-            lCurrentViewSelected.Text = "Menu is currently selected";
-        }
+
 
 
 
@@ -444,6 +439,13 @@ namespace ADPSemesterProject
                         break;
                 }
             }
+        }
+
+        private void btnMenuRead_Click(object sender, EventArgs e)
+        {
+            DisplayContent("menuCollection");
+            currentView = false;
+            lCurrentViewSelected.Text = "Menu is currently selected";
         }
     }
 }

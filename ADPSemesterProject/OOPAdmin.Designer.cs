@@ -213,6 +213,7 @@
             btnMenuRead.TabIndex = 48;
             btnMenuRead.Text = "Read";
             btnMenuRead.UseVisualStyleBackColor = true;
+            btnMenuRead.Click += btnMenuRead_Click;
             // 
             // lMenu
             // 
