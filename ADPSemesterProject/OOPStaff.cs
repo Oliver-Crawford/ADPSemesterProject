@@ -101,7 +101,7 @@ namespace ADPSemesterProject
                     MessageBox.Show("No known collection called " + collectionName);
                     break;
             }
-
+            dt.Dispose();
         }
         public void DisplayErrorUnknownSelectionHandler(EventArgs e)
         {
@@ -354,27 +354,27 @@ namespace ADPSemesterProject
             }
             dt.Dispose();
             //get the discount amount and cost from menu
-            DataTable dt2 = new DataTable();
+            dt = new DataTable();
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
                 cmd.CommandText = $"select * from menu where Name = '{txtBOrderItemsName.Text}'";
                 conn.Open();
                 SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                ad.Fill(dt2);
+                ad.Fill(dt);
                 ad.Dispose();
             }
             conn.Close();
-            if (dt2.Rows.Count == 0)
+            if (dt.Rows.Count == 0)
             {
                 DisplayError("badItemName", txtBOrderItemsName.Text);
                 return;
             }
-            foreach (DataRow row in dt2.Rows)
+            foreach (DataRow row in dt.Rows)
             {
                 itemCost = double.Parse(row.ItemArray[2].ToString());
                 discountAmount = double.Parse(row.ItemArray[3].ToString());
             }
-            dt2.Dispose();
+            dt.Dispose();
             if (chkBDiscounted.Checked)
             {
                 finalItemCost = double.Round(itemCost - (itemCost * discountAmount), 2);
@@ -438,13 +438,13 @@ namespace ADPSemesterProject
             }
             dt.Dispose();
             //get order info by id
-            DataTable dt2 = new DataTable();
+            dt = new DataTable();
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
                 cmd.CommandText = $"select * from orders where _id = {foreignKey}";
                 conn.Open();
                 SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                ad.Fill(dt2);
+                ad.Fill(dt);
                 ad.Dispose();
             }
             conn.Close();
@@ -453,11 +453,11 @@ namespace ADPSemesterProject
                 DisplayError("orphanedItem", txtBID.Text);
                 return;
             }
-            foreach (DataRow dr in dt2.Rows)
+            foreach (DataRow dr in dt.Rows)
             {
                 newTotal = double.Parse(dr.ItemArray[1].ToString());
             }
-            dt2.Dispose();
+            dt.Dispose();
             //Calculate actual new total
             newTotal -= toSubtract;
             //update orders with correct total
@@ -477,7 +477,6 @@ namespace ADPSemesterProject
             }
             conn.Close();
             DisplayContent("ordersCollection");
-            dt.Dispose();
         }
 
         private void btnPrintBill_Click(object sender, EventArgs e)
@@ -526,7 +525,7 @@ namespace ADPSemesterProject
             {
                 receipt += $"{row.ItemArray[2]}: {row.ItemArray[4]}$\n";
             }
-            dt.Clear();
+            dt.Dispose();
             //finish making and printing the receipt
             receipt += $"Total: {total}$";
             MessageBox.Show(receipt);

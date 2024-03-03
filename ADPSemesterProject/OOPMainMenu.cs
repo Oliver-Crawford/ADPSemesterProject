@@ -80,7 +80,7 @@ namespace ADPSemesterProject
                     MessageBox.Show("No known collection called " + collectionName);
                     break;
             }
-
+            dt.Dispose();
         }
 
         private void OOPMainMenu_FormClosed(object sender, FormClosedEventArgs e)

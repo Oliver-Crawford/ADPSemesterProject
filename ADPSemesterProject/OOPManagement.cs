@@ -126,7 +126,7 @@ namespace ADPSemesterProject
                     MessageBox.Show("No known collection called " + collectionName);
                     break;
             }
-
+            dt.Dispose();
         }
 
         public void DisplayError(string er, string passthrough = "")
@@ -440,7 +440,8 @@ namespace ADPSemesterProject
             {
                 orderTotalCost = double.Parse(row.ItemArray[1].ToString());
             }
-            dt.Clear();
+            dt.Dispose();
+            dt = new DataTable();
             //get the discount amount and cost from menu
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
@@ -458,10 +459,10 @@ namespace ADPSemesterProject
             }
             foreach (DataRow row in dt.Rows)
             {
-                itemCost = double.Parse(row.ItemArray[3].ToString());
-                discountAmount = double.Parse(row.ItemArray[4].ToString());
+                itemCost = double.Parse(row.ItemArray[2].ToString());
+                discountAmount = double.Parse(row.ItemArray[3].ToString());
             }
-            dt.Clear();
+            dt.Dispose();
             if (chkBDiscounted.Checked)
             {
                 finalItemCost = double.Round(itemCost - (itemCost * discountAmount), 2);
@@ -522,7 +523,8 @@ namespace ADPSemesterProject
                 toSubtract = double.Parse(dr.ItemArray[3].ToString());
                 foreignKey = int.Parse(dr.ItemArray[4].ToString());
             }
-            dt.Clear();
+            dt.Dispose();
+            dt = new DataTable();
             //get order info by id
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
@@ -540,9 +542,9 @@ namespace ADPSemesterProject
             }
             foreach (DataRow dr in dt.Rows)
             {
-                newTotal = double.Parse(dr.ItemArray[5].ToString());
+                newTotal = double.Parse(dr.ItemArray[1].ToString());
             }
-            dt.Clear();
+            dt.Dispose();
             //Calculate actual new total
             newTotal -= toSubtract;
             //update orders with correct total

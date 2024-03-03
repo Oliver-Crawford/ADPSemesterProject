@@ -64,7 +64,7 @@ namespace ADPSemesterProject
                     MessageBox.Show("No known collection called " + collectionName);
                     break;
             }
-
+            dt.Dispose();
         }
 
         public void DisplayError(string er, string passthrough = "")
