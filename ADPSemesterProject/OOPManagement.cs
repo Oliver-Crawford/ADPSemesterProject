@@ -155,7 +155,7 @@ namespace ADPSemesterProject
                     MessageBox.Show($"invalid ID: {passthrough}");
                     break;
                 case "badItemName":
-                    MessageBox.Show($"Bad item name, {passthrough} is not an item.");
+                    MessageBox.Show($"Bad item name\nItem: {passthrough} does not exist.");
                     break;
                 case "orphanedItem":
                     MessageBox.Show($"Order could not be found, Order {passthrough} does not exist");
