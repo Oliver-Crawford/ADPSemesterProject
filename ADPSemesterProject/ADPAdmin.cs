@@ -24,9 +24,7 @@ namespace ADPSemesterProject
         public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
         public static IMongoDatabase db = dbClient.GetDatabase("semester");
         static IMongoCollection<Menu> menuCollection = db.GetCollection<Menu>("menu");
-        static IMongoCollection<Orders> ordersCollection = db.GetCollection<Orders>("orders");
         static IMongoCollection<Staff> staffCollection = db.GetCollection<Staff>("staff");
-        static IMongoCollection<Tables> tablesCollection = db.GetCollection<Tables>("tables");
         //true is users, false is menu.
         bool currentView = true;
 
@@ -45,13 +43,6 @@ namespace ADPSemesterProject
             [BsonElement("Description")]
             public string Description { get; set; }
         }
-        class Orders
-        {
-            [BsonId]
-            public ObjectId ID { get; set; }
-            [BsonElement("ItemsOrdered")]
-            public double TotalCost { get; set; }
-        }
         class Staff
         {
             [BsonId]
@@ -65,31 +56,6 @@ namespace ADPSemesterProject
             [BsonElement("AccessLevel")]
             public int AccessLevel { get; set; }
 
-        }
-        class Tables
-        {
-            [BsonId]
-            public ObjectId ID { get; set; }
-            [BsonElement("TableStatus")]
-            public string TableStatus { get; set; }
-            [BsonElement("OrderStatus")]
-            public string OrderStatus { get; set; }
-            [ForeignKey("OrdersForeignKey")]
-            public ObjectId OrdersForeignKey { get; set; }
-
-        }
-        class ItemsOrdered
-        {
-            [BsonId]
-            public ObjectId ID { get; set; }
-            [BsonElement("Name")]
-            public string Name { get; set; }
-            [BsonElement("Discounted")]
-            public bool Discounted { get; set; }
-            [BsonElement("Cost")]
-            public double Cost { get; set; }
-            [ForeignKey("OrdersForeignKey")]
-            public ObjectId OrdersForeignKey { get; set; }
         }
 
         public ADPAdmin(string username, int accessLevel, string password, Form parent)
