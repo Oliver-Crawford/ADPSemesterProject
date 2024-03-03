@@ -201,81 +201,6 @@ namespace ADPSemesterProject
             lCurrentViewSelected.Text = "Menu is currently selected";
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            //This is to handle if the user clicks the column selecter, which doesn't have any use here.
-            if (e.RowIndex == -1)
-            {
-                return;
-            }
-            if (currentView)
-            {
-                //Updates user info
-                switch (e.ColumnIndex)
-                {
-                    case 0:
-                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 1:
-                        txtBUsersName.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 2:
-                        txtBUsersPassword.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 3:
-                        txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 4:
-                        txtBUsersAccessLevel.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case -1:
-                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                        txtBUsersName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                        txtBUsersPassword.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                        txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                        txtBUsersAccessLevel.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                //updates menu info
-                switch (e.ColumnIndex)
-                {
-                    case 0:
-                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 1:
-                        txtBMenuName.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 2:
-                        txtBMenuCost.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 3:
-                        txtBMenuDiscount.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 4:
-                        txtBMenuCategory.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case 5:
-                        txtBMenuDescription.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        break;
-                    case -1:
-                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                        txtBMenuName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                        txtBMenuCost.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                        txtBMenuDiscount.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                        txtBMenuCategory.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
-                        txtBMenuDescription.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-        }
 
 
 
@@ -443,6 +368,81 @@ namespace ADPSemesterProject
                 }
                 conn.Close();
                 DisplayContent("menuCollection");
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //This is to handle if the user clicks the column selecter, which doesn't have any use here.
+            if (e.RowIndex == -1)
+            {
+                return;
+            }
+            if (currentView)
+            {
+                //Updates user info
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 1:
+                        txtBUsersName.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 2:
+                        txtBUsersPassword.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 3:
+                        txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 4:
+                        txtBUsersAccessLevel.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case -1:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        txtBUsersName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtBUsersPassword.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        txtBUsersAccessLevel.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                //updates menu info
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 1:
+                        txtBMenuName.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 2:
+                        txtBMenuCost.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 3:
+                        txtBMenuDiscount.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 4:
+                        txtBMenuCategory.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case 5:
+                        txtBMenuDescription.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                        break;
+                    case -1:
+                        txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        txtBMenuName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        txtBMenuCost.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        txtBMenuDiscount.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        txtBMenuCategory.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                        txtBMenuDescription.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
