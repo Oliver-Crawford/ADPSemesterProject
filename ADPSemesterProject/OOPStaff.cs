@@ -41,19 +41,6 @@ namespace ADPSemesterProject
             DataTable dt = new DataTable();
             switch (collectionName)
             {
-                case "menuCollection":
-
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from orders";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
                 case "ordersCollection":
                     currentView = "order";
                     lCurrentViewSelected.Text = "Orders is currently selected";
@@ -75,20 +62,6 @@ namespace ADPSemesterProject
                     btnOrderItemsDelete.Enabled = false;
                     chkBDiscounted.Enabled = false;
                     break;
-                case "staffCollection":
-                    currentView = "user";
-                    lCurrentViewSelected.Text = "Users is currently selected";
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from staff";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
                 case "tablesCollection":
                     currentView = "tables";
                     lCurrentViewSelected.Text = "Tables is currently selected";
@@ -103,27 +76,6 @@ namespace ADPSemesterProject
                     conn.Close();
                     dataGridView1.DataSource = dt;
                     btnCreate.Enabled = true;
-                    btnUpdate.Enabled = true;
-                    btnDelete.Enabled = false;
-                    btnReadOrderItems.Enabled = false;
-                    btnOrderItemsCreate.Enabled = false;
-                    btnOrderItemsDelete.Enabled = false;
-                    chkBDiscounted.Enabled = false;
-                    break;
-                case "filteredUsersProjectionManagement":
-                    currentView = "user";
-                    lCurrentViewSelected.Text = "Users is currently selected";
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    btnCreate.Enabled = false;
                     btnUpdate.Enabled = true;
                     btnDelete.Enabled = false;
                     btnReadOrderItems.Enabled = false;
