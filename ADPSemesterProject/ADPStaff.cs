@@ -113,6 +113,8 @@ namespace ADPSemesterProject
                 case "ordersCollection":
                     List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = ordersList;
+                    currentView = "order";
+                    lCurrentViewSelected.Text = "Orders is currently selected";
                     btnCreate.Enabled = true;
                     btnUpdate.Enabled = false;
                     btnDelete.Enabled = true;
@@ -128,6 +130,8 @@ namespace ADPSemesterProject
                 case "tablesCollection":
                     List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = tablesList;
+                    currentView = "tables";
+                    lCurrentViewSelected.Text = "Tables is currently selected";
                     btnCreate.Enabled = false;
                     btnUpdate.Enabled = true;
                     btnDelete.Enabled = false;
@@ -158,6 +162,8 @@ namespace ADPSemesterProject
                     var itemsOrderedFilter = itemsOrderedBuilder.Eq("OrdersForeignKey", itemsOrderedId);
                     List<ItemsOrdered> filteredOrders = itemsOrderedCollection.Find(itemsOrderedFilter).ToList();
                     dataGridView1.DataSource = filteredOrders;
+                    currentView = "itemsordered";
+                    lCurrentViewSelected.Text = "Order Items is currently selected";
                     btnCreate.Enabled = false;
                     btnUpdate.Enabled = false;
                     btnDelete.Enabled = false;
@@ -225,21 +231,15 @@ namespace ADPSemesterProject
         private void btnTableRead_Click(object sender, EventArgs e)
         {
             DisplayContent("tablesCollection");
-            currentView = "tables";
-            lCurrentViewSelected.Text = "Tables is currently selected";
         }
 
         private void btnOrdersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("ordersCollection");
-            currentView = "order";
-            lCurrentViewSelected.Text = "Orders is currently selected";
         }
 
         private void btnReadOrderItems_Click(object sender, EventArgs e)
         {
-            currentView = "itemsordered";
-            lCurrentViewSelected.Text = "Order Items is currently selected";
             DisplayContent("itemsOrderedCollection");
         }
 
