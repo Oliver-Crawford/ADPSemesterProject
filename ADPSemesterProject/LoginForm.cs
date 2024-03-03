@@ -74,8 +74,7 @@ namespace ADPSemesterProject
                         }
                     }
                     conn.Close();
-                    success = true;
-                    if (success)
+                    if (accessLevel != -1)
                     {
                         OOPMainMenu OOPMainMenu = new OOPMainMenu(name, accessLevel, password, this);
                         this.Hide();
