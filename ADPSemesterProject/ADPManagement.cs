@@ -259,7 +259,7 @@ namespace ADPSemesterProject
                     txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                     txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                     break;
-                case "itemsOrdered":
+                case "itemsordered":
                     switch (e.ColumnIndex)
                     {
                         case 0:
@@ -271,8 +271,14 @@ namespace ADPSemesterProject
                         case 2:
                             chkBDiscounted.Checked = bool.Parse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
                             break;
-                        case 3:
-                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        case 4:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                            break;
+                        case -1:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                            txtBOrderItemsName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            chkBDiscounted.Checked = bool.Parse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
+
                             break;
                     }
                     break;
