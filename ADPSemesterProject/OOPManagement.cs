@@ -338,22 +338,14 @@ namespace ADPSemesterProject
             switch (currentView)
             {
                 case "user":
-                    try
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                        {
-                            cmd.CommandText = $"update staff set Role = '{txtBUsersRole.Text}' where _id = {id};";
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                        conn.Close();
-                        DisplayContent("filteredUsersProjectionManagement");
+                        cmd.CommandText = $"update staff set Role = '{txtBUsersRole.Text}' where _id = {id};";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-
+                    conn.Close();
+                    DisplayContent("filteredUsersProjectionManagement");
                     break;
 
                 case "tables":
