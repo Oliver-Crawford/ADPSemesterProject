@@ -191,7 +191,9 @@ namespace ADPSemesterProject
                 case "invalidID":
                     MessageBox.Show($"invalid ID: {passthrough}");
                     break;
-
+                case "badItemName":
+                    MessageBox.Show($"Bad item name\nItem: {passthrough} does not exist.");
+                    break;
                 default:
                     MessageBox.Show($"Unknown error: {er}");
                     break;
