@@ -211,40 +211,6 @@ namespace ADPSemesterProject
 
 
 
-        private void btnOrderItemsDelete_Click(object sender, EventArgs e)
-        {
-            //get the item that you want to delete
-            ObjectId foreignKey;
-            if (!ObjectId.TryParse(txtBID.Text, out foreignKey))
-            {
-                DisplayError("invalidID", txtBID.Text);
-                return;
-            }
-            var filterGetItemOrdered = Builders<ItemsOrdered>.Filter.Eq("ID", foreignKey);
-            List<ItemsOrdered> itemOrderedList = itemsOrderedCollection.Find(filterGetItemOrdered).ToList();
-            if (itemOrderedList.Count == 0)
-            {
-                DisplayError("invalidID", txtBID.Text);
-                return;
-            }
-            //get the orders collection based on the itemOrder foreign key, we need to make a new total cost
-            var filterGetOrder = Builders<Orders>.Filter.Eq("ID", itemOrderedList[0].OrdersForeignKey);
-            List<Orders> ordersList = ordersCollection.Find(filterGetOrder).ToList();
-            if (ordersList.Count == 0)
-            {
-                DisplayError("orphanedItem", txtBID.Text);
-                return;
-            }
-            //now that I have all the information i need, and errors probably won't happen due to user error, delete that item
-            itemsOrderedCollection.DeleteOne(filterGetItemOrdered);
-
-            double toSubtract = itemOrderedList[0].Cost;
-            double newTotal = ordersList[0].TotalCost - toSubtract;
-            //Update the orders collection using the new total cost
-            var updateUpdateTotalCost = Builders<Orders>.Update.Set("TotalCost", newTotal);
-            ordersCollection.UpdateOne(filterGetOrder, updateUpdateTotalCost);
-            DisplayContent("ordersCollection");
-        }
 
         private void OOPManagement_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -488,17 +454,17 @@ namespace ADPSemesterProject
         private void btnOrderItemsCreate_Click(object sender, EventArgs e)
         {
             //make sure foreign key exists in orders table, get discount price from menu table, insert new items ordered, update orders total cost.
-            int foreignKey;
+            DataTable dt = new DataTable();
             double orderTotalCost = 0.0;
             double discountAmount = 0.0;
             double itemCost = 0.0;
             double finalItemCost;
+            int foreignKey;
             if (!int.TryParse(txtBID.Text, out foreignKey))
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;
             }
-            DataTable dt = new DataTable();
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
                 cmd.CommandText = $"select * from orders where _id = {foreignKey}";
@@ -513,7 +479,7 @@ namespace ADPSemesterProject
                 DisplayError("orphanedItem", txtBID.Text);
                 return;
             }
-            foreach(DataRow row in dt.Rows)
+            foreach (DataRow row in dt.Rows)
             {
                 orderTotalCost = double.Parse(row.ItemArray[1].ToString());
             }
@@ -563,6 +529,73 @@ namespace ADPSemesterProject
                 cmd.ExecuteNonQuery();
             }
             conn.Close();
+            DisplayContent("ordersCollection");
+        }
+
+        private void btnOrderItemsDelete_Click(object sender, EventArgs e)
+        {
+            int id;
+            int foreignKey = -1;
+            double toSubtract = 0.0;
+            double newTotal = 0.0;
+            DataTable dt = new DataTable();
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            //get the ordered item info by id
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"select * from itemsordered where _id = {id}";
+                conn.Open();
+                SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                ad.Fill(dt);
+                ad.Dispose();
+            }
+            conn.Close();
+            if(dt.Rows.Count == 0)
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            foreach(DataRow dr in dt.Rows)
+            {
+                toSubtract = double.Parse(dr.ItemArray[3].ToString());
+                foreignKey = int.Parse(dr.ItemArray[4].ToString());
+            }
+            dt.Clear();
+            //get order info by id
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"select * from orders where _id = {foreignKey}";
+                conn.Open();
+                SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                ad.Fill(dt);
+                ad.Dispose();
+            }
+            conn.Close();
+            if (dt.Rows.Count == 0)
+            {
+                DisplayError("orphanedItem", txtBID.Text);
+                return;
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                newTotal = double.Parse(dr.ItemArray[1].ToString());
+            }
+            dt.Clear();
+            //Calculate actual new total
+            newTotal -= toSubtract;
+            //update orders with correct total
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"update orders set totalCost = {newTotal} where _id = {foreignKey};";
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+            conn.Close();
+
             DisplayContent("ordersCollection");
         }
     }
