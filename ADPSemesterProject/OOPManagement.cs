@@ -483,14 +483,24 @@ namespace ADPSemesterProject
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            int id;
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
             switch (currentView)
             {
                 case "user":
                     try
                     {
-                        var filterUser = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                        var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
-                        staffCollection.UpdateOne(filterUser, updateUser);
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            cmd.CommandText = $"update staff set Role = '{txtBUsersRole.Text}' where _id = {id};";
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                        conn.Close();
                         DisplayContent("filteredUsersProjectionManagement");
                     }
                     catch (Exception ex)
@@ -501,20 +511,15 @@ namespace ADPSemesterProject
                     break;
 
                 case "tables":
-                    ObjectId id;
-                    if (!ObjectId.TryParse(txtBID.Text, out id))
+                    int foreignKey = -1;
+                    int.TryParse(txtBTableOrderId.Text, out foreignKey);
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
+                        cmd.CommandText = $"update tables set TableStatus = '{txtBTableStatus.Text}', OrderStatus = '{txtBTableOrderStatus.Text}', OrdersId = {foreignKey} where _id = {id};";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
                     }
-                    var filterTables = Builders<Tables>.Filter.Eq("ID", id);
-                    var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
-                    ObjectId foreignKey;
-                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
-                    {
-                        updateTables.Set("OrdersForeignKey", foreignKey);
-                    }
-                    tablesCollection.UpdateOne(filterTables, updateTables);
+                    conn.Close();
                     DisplayContent("tablesCollection");
                     break;
 
