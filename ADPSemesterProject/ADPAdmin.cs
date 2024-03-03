@@ -111,6 +111,8 @@ namespace ADPSemesterProject
                 case "menuCollection":
                     List<Menu> menuList = menuCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = menuList;
+                    currentView = false;
+                    lCurrentViewSelected.Text = "Menu is currently selected";
                     break;
                 case "ordersCollection":
                     List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
@@ -119,6 +121,8 @@ namespace ADPSemesterProject
                 case "staffCollection":
                     List<Staff> staffList = staffCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = staffList;
+                    currentView = true;
+                    lCurrentViewSelected.Text = "Users is currently selected";
                     break;
                 case "tablesCollection":
                     List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
@@ -179,15 +183,11 @@ namespace ADPSemesterProject
         private void btnUsersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("staffCollection");
-            currentView = true;
-            lCurrentViewSelected.Text = "Users is currently selected";
         }
 
         private void btnMenuRead_Click(object sender, EventArgs e)
         {
             DisplayContent("menuCollection");
-            currentView = false;
-            lCurrentViewSelected.Text = "Menu is currently selected";
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
