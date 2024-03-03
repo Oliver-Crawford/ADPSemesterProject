@@ -58,18 +58,6 @@ namespace ADPSemesterProject
                     currentView = false;
                     lCurrentViewSelected.Text = "Menu is currently selected";
                     break;
-                case "ordersCollection":
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from orders";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
                 case "staffCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
@@ -83,30 +71,6 @@ namespace ADPSemesterProject
                     dataGridView1.DataSource = dt;
                     currentView = true;
                     lCurrentViewSelected.Text = "Users is currently selected";
-                    break;
-                case "tablesCollection":
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from tables";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
-                case "filteredSCUserOnly":
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
                     break;
                 default:
                     MessageBox.Show("No known collection called " + collectionName);
