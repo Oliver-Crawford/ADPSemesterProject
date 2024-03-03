@@ -27,46 +27,6 @@ namespace ADPSemesterProject
         //true is users, false is menu.
         bool currentView = true;
 
-        class Menu
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public double Cost { get; set; }
-            public double Discount { get; set; }
-            public string Category { get; set; }
-            public string Description { get; set; }
-        }
-        class Orders
-        {
-            public int ID { get; set; }
-            public double TotalCost { get; set; }
-        }
-        class Staff
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public string Password { get; set; }
-            public string Role { get; set; }
-            public int AccessLevel { get; set; }
-
-        }
-        class Tables
-        {
-            public int ID { get; set; }
-            public string TableStatus { get; set; }
-            public string OrderStatus { get; set; }
-            public int OrdersForeignKey { get; set; }
-
-        }
-        class ItemsOrdered
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public bool Discounted { get; set; }
-            public double Cost { get; set; }
-            public int OrdersForeignKey { get; set; }
-        }
-
         public OOPAdmin(string username, int accessLevel, string password, Form parent)
         {
             InitializeComponent();
@@ -183,20 +143,6 @@ namespace ADPSemesterProject
 
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private void OOPAdmin_FormClosed(object sender, FormClosedEventArgs e)
         {
