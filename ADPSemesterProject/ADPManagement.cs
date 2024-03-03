@@ -314,33 +314,26 @@ namespace ADPSemesterProject
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            ObjectId id;
+            if(!ObjectId.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
             switch (currentView)
             {
                 case "user":
-                    try
-                    {
-                        var filterUser = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                        var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
-                        staffCollection.UpdateOne(filterUser, updateUser);
-                        DisplayContent("filteredUsersProjectionManagement");
-                    } catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    
+                    var filterUser = Builders<Staff>.Filter.Eq("ID", id);
+                    var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
+                    staffCollection.UpdateOne(filterUser, updateUser);
+                    DisplayContent("filteredUsersProjectionManagement");
                     break;
 
                 case "tables":
-                    ObjectId id;
-                    if(!ObjectId.TryParse(txtBID.Text, out id))
-                    {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
-                    }
                     var filterTables = Builders<Tables>.Filter.Eq("ID", id);
                     var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
                     ObjectId foreignKey;
-                    if(!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey)){
+                    if(ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey)){
                         updateTables.Set("OrdersForeignKey", foreignKey);
                     }
                     tablesCollection.UpdateOne(filterTables, updateTables);
