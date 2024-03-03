@@ -33,6 +33,7 @@ namespace ADPSemesterProject
         public LoginForm()
         {
             InitializeComponent();
+            this.BackColor = Color.Coral;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -92,6 +93,16 @@ namespace ADPSemesterProject
 
 
 
+        }
+
+        private void rBtnMongoDB_CheckedChanged(object sender, EventArgs e)
+        {
+            this.BackColor = Color.Coral;
+        }
+
+        private void rBtnSQLDB_CheckedChanged(object sender, EventArgs e)
+        {
+            this.BackColor = Color.Thistle;
         }
     }
 }

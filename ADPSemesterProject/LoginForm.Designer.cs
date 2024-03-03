@@ -90,6 +90,7 @@
             rBtnMongoDB.TabStop = true;
             rBtnMongoDB.Text = "Mongo DB";
             rBtnMongoDB.UseVisualStyleBackColor = true;
+            rBtnMongoDB.CheckedChanged += rBtnMongoDB_CheckedChanged;
             // 
             // rBtnSQLDB
             // 
@@ -101,6 +102,7 @@
             rBtnSQLDB.TabStop = true;
             rBtnSQLDB.Text = "SQL DB";
             rBtnSQLDB.UseVisualStyleBackColor = true;
+            rBtnSQLDB.CheckedChanged += rBtnSQLDB_CheckedChanged;
             // 
             // LoginForm
             // 
