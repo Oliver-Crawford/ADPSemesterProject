@@ -322,7 +322,7 @@ namespace ADPSemesterProject
         private void btnOrderItemsCreate_Click(object sender, EventArgs e)
         {
             //make sure foreign key exists in orders table, get discount price from menu table, insert new items ordered, update orders total cost.
-            DataTable dt = new DataTable();
+            
             double orderTotalCost = 0.0;
             double discountAmount = 0.0;
             double itemCost = 0.0;
@@ -333,6 +333,7 @@ namespace ADPSemesterProject
                 DisplayError("invalidID", txtBID.Text);
                 return;
             }
+            DataTable dt = new DataTable();
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
                 cmd.CommandText = $"select * from orders where _id = {foreignKey}";
@@ -351,28 +352,29 @@ namespace ADPSemesterProject
             {
                 orderTotalCost = double.Parse(row.ItemArray[1].ToString());
             }
-            dt.Clear();
+            dt.Dispose();
             //get the discount amount and cost from menu
+            DataTable dt2 = new DataTable();
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
                 cmd.CommandText = $"select * from menu where Name = '{txtBOrderItemsName.Text}'";
                 conn.Open();
                 SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                ad.Fill(dt);
+                ad.Fill(dt2);
                 ad.Dispose();
             }
             conn.Close();
-            if (dt.Rows.Count == 0)
+            if (dt2.Rows.Count == 0)
             {
                 DisplayError("badItemName", txtBOrderItemsName.Text);
                 return;
             }
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRow row in dt2.Rows)
             {
-                itemCost = double.Parse(row.ItemArray[3].ToString());
-                discountAmount = double.Parse(row.ItemArray[4].ToString());
+                itemCost = double.Parse(row.ItemArray[2].ToString());
+                discountAmount = double.Parse(row.ItemArray[3].ToString());
             }
-            dt.Clear();
+            dt2.Dispose();
             if (chkBDiscounted.Checked)
             {
                 finalItemCost = double.Round(itemCost - (itemCost * discountAmount), 2);
@@ -407,6 +409,7 @@ namespace ADPSemesterProject
             int foreignKey = -1;
             double toSubtract = 0.0;
             double newTotal = 0.0;
+
             DataTable dt = new DataTable();
             if (!int.TryParse(txtBID.Text, out id))
             {
@@ -433,14 +436,15 @@ namespace ADPSemesterProject
                 toSubtract = double.Parse(dr.ItemArray[3].ToString());
                 foreignKey = int.Parse(dr.ItemArray[4].ToString());
             }
-            dt.Clear();
+            dt.Dispose();
             //get order info by id
+            DataTable dt2 = new DataTable();
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
                 cmd.CommandText = $"select * from orders where _id = {foreignKey}";
                 conn.Open();
                 SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                ad.Fill(dt);
+                ad.Fill(dt2);
                 ad.Dispose();
             }
             conn.Close();
@@ -449,11 +453,11 @@ namespace ADPSemesterProject
                 DisplayError("orphanedItem", txtBID.Text);
                 return;
             }
-            foreach (DataRow dr in dt.Rows)
+            foreach (DataRow dr in dt2.Rows)
             {
-                newTotal = double.Parse(dr.ItemArray[5].ToString());
+                newTotal = double.Parse(dr.ItemArray[1].ToString());
             }
-            dt.Clear();
+            dt2.Dispose();
             //Calculate actual new total
             newTotal -= toSubtract;
             //update orders with correct total
@@ -464,7 +468,16 @@ namespace ADPSemesterProject
                 cmd.ExecuteNonQuery();
             }
             conn.Close();
+            //delete itemordered
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"delete from itemsordered where _id = {foreignKey}";
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+            conn.Close();
             DisplayContent("ordersCollection");
+            dt.Dispose();
         }
 
         private void btnPrintBill_Click(object sender, EventArgs e)
