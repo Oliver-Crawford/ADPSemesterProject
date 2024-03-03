@@ -511,16 +511,16 @@ namespace ADPSemesterProject
             DisplayContent("ordersCollection");
         }
 
+        private void OOPManagement_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
+        }
+
         private void btnTableRead_Click(object sender, EventArgs e)
         {
             DisplayContent("tablesCollection");
             currentView = "tables";
             lCurrentViewSelected.Text = "Tables is currently selected";
-        }
-
-        private void OOPManagement_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
         }
     }
 }

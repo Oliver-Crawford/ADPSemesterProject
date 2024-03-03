@@ -117,6 +117,7 @@
             btnTableRead.TabIndex = 112;
             btnTableRead.Text = "Read";
             btnTableRead.UseVisualStyleBackColor = true;
+            btnTableRead.Click += btnTableRead_Click;
             // 
             // label6
             // 
