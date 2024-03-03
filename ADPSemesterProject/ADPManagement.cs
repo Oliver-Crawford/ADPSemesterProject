@@ -419,6 +419,7 @@ namespace ADPSemesterProject
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
+            
             switch (currentView)
             {
                 case "order":
@@ -427,21 +428,15 @@ namespace ADPSemesterProject
                     DisplayContent("ordersCollection");
                     break;
                 case "tables":
-                    try
+                    ObjectId foreignKey;
+                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
                     {
-                        Tables newTable = new Tables() {TableStatus = txtBTableStatus.Text, OrderStatus = txtBTableOrderStatus.Text};
-                        ObjectId foreignKey;
-                        if(ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
-                        {
-                            newTable.OrdersForeignKey = foreignKey;
-                        }
-                        tablesCollection.InsertOne(newTable);
-                        DisplayContent("tablesCollection");
+                        DisplayError("invalidID", txtBID.Text);
+                        break;
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
+                    Tables newTable = new Tables() {TableStatus = txtBTableStatus.Text, OrderStatus = txtBTableOrderStatus.Text, OrdersForeignKey = foreignKey};
+                    tablesCollection.InsertOne(newTable);
+                    DisplayContent("tablesCollection");
                     break;
                 default:
                     DisplayErrorUnknownSelectionHandler(e);
