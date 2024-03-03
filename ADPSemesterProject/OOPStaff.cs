@@ -61,7 +61,7 @@ namespace ADPSemesterProject
                     }
                     conn.Close();
                     dataGridView1.DataSource = dt;
-                    btnCreate.Enabled = true;
+                    btnCreate.Enabled = false;
                     btnUpdate.Enabled = true;
                     btnDelete.Enabled = false;
                     btnReadOrderItems.Enabled = false;
@@ -249,22 +249,6 @@ namespace ADPSemesterProject
                     }
                     conn.Close();
                     DisplayContent("ordersCollection");
-                    break;
-                case "tables":
-                    int foreignKey;
-                    if (!int.TryParse(txtBTableOrderId.Text, out foreignKey))
-                    {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
-                    }
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = $"insert into tables (TableStatus, OrderStatus, OrdersId) Values ('{txtBTableStatus.Text}', '{txtBTableOrderStatus.Text}', {foreignKey});";
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                    conn.Close();
-                    DisplayContent("tablesCollection");
                     break;
                 default:
                     DisplayErrorUnknownSelectionHandler(e);
