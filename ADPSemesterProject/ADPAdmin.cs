@@ -1,16 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ADPSemesterProject
 {
@@ -270,7 +260,7 @@ namespace ADPSemesterProject
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             ObjectId id;
-            if(!ObjectId.TryParse(txtBID.Text, out id))
+            if (!ObjectId.TryParse(txtBID.Text, out id))
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;

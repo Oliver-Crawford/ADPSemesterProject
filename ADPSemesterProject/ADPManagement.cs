@@ -1,16 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ADPSemesterProject
 {
@@ -150,7 +141,7 @@ namespace ADPSemesterProject
                     currentView = "itemsordered";
                     lCurrentViewSelected.Text = "Order Items is currently selected";
                     ObjectId itemsOrderedId;
-                    if(!ObjectId.TryParse(txtBID.Text, out itemsOrderedId))
+                    if (!ObjectId.TryParse(txtBID.Text, out itemsOrderedId))
                     {
                         DisplayError("invalidID", txtBID.Text);
                         DisplayContent("ordersCollection");
@@ -317,7 +308,7 @@ namespace ADPSemesterProject
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             ObjectId id;
-            if(!ObjectId.TryParse(txtBID.Text, out id))
+            if (!ObjectId.TryParse(txtBID.Text, out id))
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;
@@ -334,7 +325,8 @@ namespace ADPSemesterProject
                 case "tables":
                     var filterTables = Builders<Tables>.Filter.Eq("ID", id);
                     ObjectId foreignKey;
-                    if(!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey)){
+                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
+                    {
                         DisplayError("invalidID", txtBID.Text);
                         break;
                     }
@@ -382,7 +374,7 @@ namespace ADPSemesterProject
                     break;
                 case "tables":
                     ObjectId tableId;
-                    if(!ObjectId.TryParse(txtBID.Text, out tableId))
+                    if (!ObjectId.TryParse(txtBID.Text, out tableId))
                     {
                         DisplayError("invalidID", txtBID.Text);
                         break;
@@ -418,7 +410,7 @@ namespace ADPSemesterProject
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            
+
             switch (currentView)
             {
                 case "order":
@@ -429,7 +421,7 @@ namespace ADPSemesterProject
                 case "tables":
                     ObjectId foreignKey;
                     Tables newTable = new Tables();
-                    if(txtBTableOrderId.Text == "")
+                    if (txtBTableOrderId.Text == "")
                     {
                         newTable.TableStatus = txtBTableStatus.Text;
                         newTable.OrderStatus = txtBTableOrderStatus.Text;
@@ -467,7 +459,7 @@ namespace ADPSemesterProject
             }
             //check and make sure related ID exists
             ObjectId foreignKey;
-            if(!ObjectId.TryParse(txtBID.Text, out foreignKey))
+            if (!ObjectId.TryParse(txtBID.Text, out foreignKey))
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;
@@ -504,7 +496,7 @@ namespace ADPSemesterProject
         {
             //get the item that you want to delete
             ObjectId foreignKey;
-            if(!ObjectId.TryParse(txtBID.Text, out foreignKey))
+            if (!ObjectId.TryParse(txtBID.Text, out foreignKey))
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;

@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using System.Data.SQLite;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ADPSemesterProject
 {
@@ -524,12 +512,12 @@ namespace ADPSemesterProject
                 ad.Dispose();
             }
             conn.Close();
-            if(dt.Rows.Count == 0)
+            if (dt.Rows.Count == 0)
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;
             }
-            foreach(DataRow dr in dt.Rows)
+            foreach (DataRow dr in dt.Rows)
             {
                 toSubtract = double.Parse(dr.ItemArray[3].ToString());
                 foreignKey = int.Parse(dr.ItemArray[4].ToString());

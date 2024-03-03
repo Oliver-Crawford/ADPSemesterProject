@@ -1,17 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ADPSemesterProject
 {
@@ -457,7 +447,7 @@ namespace ADPSemesterProject
             }
             var ordersFilter = Builders<Orders>.Filter.Eq("ID", orderId);
             List<Orders> filteredOrders = ordersCollection.Find(ordersFilter).ToList();
-            if(filteredOrders.Count == 0)
+            if (filteredOrders.Count == 0)
             {
                 DisplayError("invalidID", txtBID.Text);
                 return;
@@ -466,7 +456,7 @@ namespace ADPSemesterProject
             List<ItemsOrdered> filteredItemsOrdered = itemsOrderedCollection.Find(orderItemsFilter).ToList();
             string receipt = "ORDER: ";
             receipt += filteredOrders[0].ID + "\n";
-            foreach(var item in filteredItemsOrdered)
+            foreach (var item in filteredItemsOrdered)
             {
                 receipt += $"{item.Name}: {item.Cost}$\n";
             }

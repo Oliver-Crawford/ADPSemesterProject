@@ -1,19 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+﻿using System.Data;
 using System.Data.SQLite;
-using System.Numerics;
 
 namespace ADPSemesterProject
 {
@@ -518,7 +504,7 @@ namespace ADPSemesterProject
                 ad.Dispose();
             }
             conn.Close();
-            foreach(DataRow row in dt.Rows)
+            foreach (DataRow row in dt.Rows)
             {
                 orderNumber = row.ItemArray[0].ToString();
                 total = double.Parse(row.ItemArray[1].ToString());

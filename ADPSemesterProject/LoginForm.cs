@@ -1,12 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Windows.Forms;
 using System.Data.SQLite;
-using System.Data;
-using Microsoft.Data.Sqlite;
 namespace ADPSemesterProject
 {
     public partial class LoginForm : Form
@@ -32,7 +27,7 @@ namespace ADPSemesterProject
             public int AccessLevel { get; set; }
 
         }
-        
+
 
 
         public LoginForm()
@@ -60,7 +55,7 @@ namespace ADPSemesterProject
             }
             else
             {
-                using(SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = $"select * from staff where Name = '{txtBName.Text}' AND Password = '{txtBPassword.Text}'";
                     bool success = false;
@@ -70,7 +65,7 @@ namespace ADPSemesterProject
                     conn.Open();
                     using (var reader = cmd.ExecuteReader())
                     {
-                            
+
                         while (reader.Read())
                         {
                             name = reader[1].ToString();
@@ -91,12 +86,12 @@ namespace ADPSemesterProject
                         MessageBox.Show("Invalid username/password");
                     }
                 }
-                    
 
-                
+
+
             }
-            
-            
+
+
 
         }
     }

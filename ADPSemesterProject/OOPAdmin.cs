@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Data;
 using System.Data.SQLite;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace ADPSemesterProject
 {
