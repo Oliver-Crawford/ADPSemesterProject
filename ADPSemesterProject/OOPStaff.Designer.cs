@@ -213,6 +213,7 @@
             btnOrdersRead.TabIndex = 129;
             btnOrdersRead.Text = "Read";
             btnOrdersRead.UseVisualStyleBackColor = true;
+            btnOrdersRead.Click += btnOrdersRead_Click;
             // 
             // label2
             // 

@@ -209,13 +209,6 @@ namespace ADPSemesterProject
             }
         }
 
-        private void btnOrdersRead_Click(object sender, EventArgs e)
-        {
-            DisplayContent("ordersCollection");
-            currentView = "order";
-            lCurrentViewSelected.Text = "Orders is currently selected";
-        }
-
         private void btnReadOrderItems_Click(object sender, EventArgs e)
         {
             currentView = "itemsordered";
@@ -486,6 +479,11 @@ namespace ADPSemesterProject
         private void btnTableRead_Click(object sender, EventArgs e)
         {
             DisplayContent("tablesCollection");
+        }
+
+        private void btnOrdersRead_Click(object sender, EventArgs e)
+        {
+            DisplayContent("ordersCollection");
         }
     }
 }
