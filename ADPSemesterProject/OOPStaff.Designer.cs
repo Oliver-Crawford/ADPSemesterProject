@@ -189,6 +189,7 @@
             btnOrderItemsCreate.TabIndex = 132;
             btnOrderItemsCreate.Text = "Create";
             btnOrderItemsCreate.UseVisualStyleBackColor = true;
+            btnOrderItemsCreate.Click += btnOrderItemsCreate_Click;
             // 
             // txtBOrderItemsName
             // 
