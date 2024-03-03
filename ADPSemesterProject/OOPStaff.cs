@@ -176,8 +176,6 @@ namespace ADPSemesterProject
                 DisplayError("unknownSelection", e.ToString());
             }
         }
-
-
         public void DisplayError(string er, string passthrough = "")
         {
             switch (er)
@@ -209,13 +207,6 @@ namespace ADPSemesterProject
                     break;
 
             }
-        }
-
-        private void btnTableRead_Click(object sender, EventArgs e)
-        {
-            DisplayContent("tablesCollection");
-            currentView = "tables";
-            lCurrentViewSelected.Text = "Tables is currently selected";
         }
 
         private void btnOrdersRead_Click(object sender, EventArgs e)
@@ -490,6 +481,11 @@ namespace ADPSemesterProject
                 default:
                     break;
             }
+        }
+
+        private void btnTableRead_Click(object sender, EventArgs e)
+        {
+            DisplayContent("tablesCollection");
         }
     }
 }
