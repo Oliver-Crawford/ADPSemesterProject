@@ -379,7 +379,7 @@ namespace ADPSemesterProject
                 case "order":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        cmd.CommandText = $"delete from order where _id = {id}";
+                        cmd.CommandText = $"delete from orders where _id = {id}";
                         conn.Open();
                         cmd.ExecuteNonQuery();
                     }
@@ -417,7 +417,7 @@ namespace ADPSemesterProject
                 case "order":
                     using (var cmd = new SQLiteCommand(conn))
                     {
-                        cmd.CommandText = $"insert into orders (totalCost) Values (0.0);";
+                        cmd.CommandText = $"insert into orders (ItemsOrdered) Values (0.0);";
                         conn.Open();
                         cmd.ExecuteNonQuery();
                     }
@@ -433,7 +433,7 @@ namespace ADPSemesterProject
                     }
                     using (var cmd = new SQLiteCommand(conn))
                     {
-                        cmd.CommandText = $"insert into tables (TableStatus, OrderStatus, OrdersId) Values ({txtBTableStatus.Text}, {txtBTableOrderStatus.Text}, foreignKey);";
+                        cmd.CommandText = $"insert into tables (TableStatus, OrderStatus, OrdersId) Values ('{txtBTableStatus.Text}', '{txtBTableOrderStatus.Text}', {foreignKey});";
                         conn.Open();
                         cmd.ExecuteNonQuery();
                     }
@@ -482,7 +482,7 @@ namespace ADPSemesterProject
             //get the discount amount and cost from menu
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
-                cmd.CommandText = $"select * from menu where Name = {txtBOrderItemsName.Text}";
+                cmd.CommandText = $"select * from menu where Name = '{txtBOrderItemsName.Text}'";
                 conn.Open();
                 SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                 ad.Fill(dt);
@@ -496,8 +496,8 @@ namespace ADPSemesterProject
             }
             foreach (DataRow row in dt.Rows)
             {
-                itemCost = double.Parse(row.ItemArray[2].ToString());
-                discountAmount = double.Parse(row.ItemArray[3].ToString());
+                itemCost = double.Parse(row.ItemArray[3].ToString());
+                discountAmount = double.Parse(row.ItemArray[4].ToString());
             }
             dt.Clear();
             if (chkBDiscounted.Checked)
@@ -508,6 +508,7 @@ namespace ADPSemesterProject
             {
                 finalItemCost = double.Round(itemCost, 2);
             }
+            orderTotalCost += finalItemCost;
             //insert new itemsordered
             using (var cmd = new SQLiteCommand(conn))
             {
@@ -519,7 +520,7 @@ namespace ADPSemesterProject
             //update orders
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
-                cmd.CommandText = $"update orders set totalCost = {orderTotalCost} where _id = {foreignKey};";
+                cmd.CommandText = $"update orders set ItemsOrdered = {orderTotalCost} where _id = {foreignKey};";
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
@@ -585,12 +586,11 @@ namespace ADPSemesterProject
             //update orders with correct total
             using (SQLiteCommand cmd = new SQLiteCommand(conn))
             {
-                cmd.CommandText = $"update orders set totalCost = {newTotal} where _id = {foreignKey};";
+                cmd.CommandText = $"update orders set ItemsOrdered = {newTotal} where _id = {foreignKey};";
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
             conn.Close();
-
             DisplayContent("ordersCollection");
         }
     }
