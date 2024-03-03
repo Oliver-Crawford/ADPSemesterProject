@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace ADPSemesterProject
 {
@@ -191,55 +193,6 @@ namespace ADPSemesterProject
             }
         }
 
-
-
-
-
-
-
-
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            switch (currentView)
-            {
-                case "user":
-                    try
-                    {
-                        var filterUser = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                        var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
-                        staffCollection.UpdateOne(filterUser, updateUser);
-                        DisplayContent("filteredUsersProjectionManagement");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-
-                    break;
-
-                case "tables":
-                    ObjectId id;
-                    if (!ObjectId.TryParse(txtBID.Text, out id))
-                    {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
-                    }
-                    var filterTables = Builders<Tables>.Filter.Eq("ID", id);
-                    var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
-                    ObjectId foreignKey;
-                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
-                    {
-                        updateTables.Set("OrdersForeignKey", foreignKey);
-                    }
-                    tablesCollection.UpdateOne(filterTables, updateTables);
-                    DisplayContent("tablesCollection");
-                    break;
-
-                default:
-                    DisplayErrorUnknownSelectionHandler(e);
-                    break;
-            }
-        }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -524,6 +477,49 @@ namespace ADPSemesterProject
                     }
                     break;
                 default:
+                    break;
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            switch (currentView)
+            {
+                case "user":
+                    try
+                    {
+                        var filterUser = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+                        var updateUser = Builders<Staff>.Update.Set("Role", txtBUsersRole.Text);
+                        staffCollection.UpdateOne(filterUser, updateUser);
+                        DisplayContent("filteredUsersProjectionManagement");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    break;
+
+                case "tables":
+                    ObjectId id;
+                    if (!ObjectId.TryParse(txtBID.Text, out id))
+                    {
+                        DisplayError("invalidID", txtBID.Text);
+                        break;
+                    }
+                    var filterTables = Builders<Tables>.Filter.Eq("ID", id);
+                    var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
+                    ObjectId foreignKey;
+                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
+                    {
+                        updateTables.Set("OrdersForeignKey", foreignKey);
+                    }
+                    tablesCollection.UpdateOne(filterTables, updateTables);
+                    DisplayContent("tablesCollection");
+                    break;
+
+                default:
+                    DisplayErrorUnknownSelectionHandler(e);
                     break;
             }
         }
