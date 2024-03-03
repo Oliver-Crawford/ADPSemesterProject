@@ -208,38 +208,6 @@ namespace ADPSemesterProject
 
 
 
-        private void btnCreate_Click(object sender, EventArgs e)
-        {
-            switch (currentView)
-            {
-                case "order":
-                    Orders newOrder = new Orders() { TotalCost = 0.0 };
-                    ordersCollection.InsertOne(newOrder);
-                    DisplayContent("ordersCollection");
-                    break;
-                case "tables":
-                    try
-                    {
-                        Tables newTable = new Tables() { TableStatus = txtBTableStatus.Text, OrderStatus = txtBTableOrderStatus.Text };
-                        ObjectId foreignKey;
-                        if (ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
-                        {
-                            newTable.OrdersForeignKey = foreignKey;
-                        }
-                        tablesCollection.InsertOne(newTable);
-                        DisplayContent("tablesCollection");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    break;
-                default:
-                    DisplayErrorUnknownSelectionHandler(e);
-                    break;
-            }
-        }
-
         private void btnOrderItemsCreate_Click(object sender, EventArgs e)
         {
             //get the menu info, doing this first so if it doesn't exist then it won't insert bad data into the DB
@@ -520,6 +488,42 @@ namespace ADPSemesterProject
                     DisplayErrorUnknownSelectionHandler(e);
                     break;
 
+            }
+        }
+
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+            switch (currentView)
+            {
+                case "order":
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"insert into orders (totalCost) Values (0.0);";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    DisplayContent("ordersCollection");
+                    break;
+                case "tables":
+                    int foreignKey;
+                    if (!int.TryParse(txtBTableOrderId.Text, out foreignKey))
+                    {
+                        DisplayError("invalidID", txtBID.Text);
+                        break;
+                    }
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"insert into tables (TableStatus, OrderStatus, OrdersId) Values ({txtBTableStatus.Text}, {txtBTableOrderStatus.Text}, foreignKey);";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    DisplayContent("tablesCollection");
+                    break;
+                default:
+                    DisplayErrorUnknownSelectionHandler(e);
+                    break;
             }
         }
     }
