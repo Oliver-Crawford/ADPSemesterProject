@@ -332,10 +332,13 @@ namespace ADPSemesterProject
                 case "tables":
                     var filterTables = Builders<Tables>.Filter.Eq("ID", id);
                     var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
+
                     ObjectId foreignKey;
                     if(ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey)){
-                        updateTables.Set("OrdersForeignKey", foreignKey);
+                        DisplayError("invalidID", txtBID.Text);
+                        break;
                     }
+                    updateTables.Set("OrdersForeignKey", foreignKey);
                     tablesCollection.UpdateOne(filterTables, updateTables);
                     DisplayContent("tablesCollection");
                     break;
