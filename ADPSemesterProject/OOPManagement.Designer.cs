@@ -145,6 +145,7 @@
             btnReadOrderItems.TabIndex = 109;
             btnReadOrderItems.Text = "Read";
             btnReadOrderItems.UseVisualStyleBackColor = true;
+            btnReadOrderItems.Click += btnReadOrderItems_Click;
             // 
             // chkBDiscounted
             // 
