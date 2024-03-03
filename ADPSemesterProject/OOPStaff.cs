@@ -211,42 +211,6 @@ namespace ADPSemesterProject
 
 
 
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            switch (currentView)
-            {
-                case "order":
-                    ObjectId orderId;
-                    if (!ObjectId.TryParse(txtBID.Text, out orderId))
-                    {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
-                    }
-                    //make sure the order you're deleting exists
-                    var filterOrder = Builders<Orders>.Filter.Eq("ID", orderId);
-                    List<Orders> ordersList = ordersCollection.Find(filterOrder).ToList();
-                    if (ordersList.Count == 0)
-                    {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
-                    }
-                    //delete all the items ordered relating to this order
-                    var filterGetItemsOrdered = Builders<ItemsOrdered>.Filter.Eq("OrdersForeignKey", orderId);
-                    List<ItemsOrdered> itemsOrderedList = itemsOrderedCollection.Find(filterGetItemsOrdered).ToList();
-                    foreach (ItemsOrdered item in itemsOrderedList)
-                    {
-                        var filterDeleteItem = Builders<ItemsOrdered>.Filter.Eq("ID", item.ID);
-                        itemsOrderedCollection.DeleteOne(filterDeleteItem);
-                    }
-                    //delete the order
-                    ordersCollection.DeleteOne(filterOrder);
-                    DisplayContent("ordersCollection");
-                    break;
-                default:
-                    DisplayErrorUnknownSelectionHandler(e);
-                    break;
-            }
-        }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
@@ -504,6 +468,40 @@ namespace ADPSemesterProject
                     break;
             }
         }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            int id;
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            switch (currentView)
+            {
+                case "order":
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"delete from orders where _id = {id}";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"delete from itemsordered where ordersForeignKey = {id}";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    DisplayContent("ordersCollection");
+                    break;
+                default:
+                    DisplayErrorUnknownSelectionHandler(e);
+                    break;
+
+            }
+        }
     }
-    }
+}
 }
