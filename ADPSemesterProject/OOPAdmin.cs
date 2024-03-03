@@ -151,7 +151,6 @@ namespace ADPSemesterProject
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            DataTable dt = new DataTable();
             int id = -1;
             if (!int.TryParse(txtBID.Text, out id))
             {

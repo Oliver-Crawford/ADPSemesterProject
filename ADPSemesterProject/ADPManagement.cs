@@ -332,7 +332,6 @@ namespace ADPSemesterProject
                 case "tables":
                     var filterTables = Builders<Tables>.Filter.Eq("ID", id);
                     var updateTables = Builders<Tables>.Update.Set("TableStatus", txtBTableStatus.Text).Set("OrderStatus", txtBTableOrderStatus.Text);
-
                     ObjectId foreignKey;
                     if(ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey)){
                         DisplayError("invalidID", txtBID.Text);
