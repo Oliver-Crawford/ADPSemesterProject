@@ -55,6 +55,8 @@ namespace ADPSemesterProject
                     }
                     conn.Close();
                     dataGridView1.DataSource = dt;
+                    currentView = false;
+                    lCurrentViewSelected.Text = "Menu is currently selected";
                     break;
                 case "ordersCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -79,6 +81,8 @@ namespace ADPSemesterProject
                     }
                     conn.Close();
                     dataGridView1.DataSource = dt;
+                    currentView = true;
+                    lCurrentViewSelected.Text = "Users is currently selected";
                     break;
                 case "tablesCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -384,15 +388,11 @@ namespace ADPSemesterProject
         private void btnMenuRead_Click(object sender, EventArgs e)
         {
             DisplayContent("menuCollection");
-            currentView = false;
-            lCurrentViewSelected.Text = "Menu is currently selected";
         }
 
         private void btnUsersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("staffCollection");
-            currentView = true;
-            lCurrentViewSelected.Text = "Users is currently selected";
         }
     }
 }
