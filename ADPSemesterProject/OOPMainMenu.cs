@@ -64,46 +64,10 @@ namespace ADPSemesterProject
             DataTable dt = new DataTable();
             switch (collectionName)
             {
-                case "menuCollection":
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from menu";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
-                case "ordersCollection":
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from orders";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
                 case "staffCollection":
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
                         cmd.CommandText = "select * from staff";
-                        conn.Open();
-                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
-                        ad.Fill(dt);
-                        ad.Dispose();
-                    }
-                    conn.Close();
-                    dataGridView1.DataSource = dt;
-                    break;
-                case "tablesCollection":
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = "select * from tables";
                         conn.Open();
                         SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                         ad.Fill(dt);
