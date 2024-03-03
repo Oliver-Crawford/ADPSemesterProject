@@ -180,6 +180,7 @@
             btnOrderItemsDelete.TabIndex = 133;
             btnOrderItemsDelete.Text = "Delete";
             btnOrderItemsDelete.UseVisualStyleBackColor = true;
+            btnOrderItemsDelete.Click += btnOrderItemsDelete_Click;
             // 
             // btnOrderItemsCreate
             // 
