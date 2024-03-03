@@ -106,10 +106,6 @@ namespace ADPSemesterProject
         {
             switch (collectionName)
             {
-                case "menuCollection":
-                    List<Menu> menuList = menuCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = menuList;
-                    break;
                 case "ordersCollection":
                     List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = ordersList;
@@ -123,26 +119,11 @@ namespace ADPSemesterProject
                     btnOrderItemsDelete.Enabled = false;
                     chkBDiscounted.Enabled = false;
                     break;
-                case "staffCollection":
-                    List<Staff> staffList = staffCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = staffList;
-                    break;
                 case "tablesCollection":
                     List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = tablesList;
                     currentView = "tables";
                     lCurrentViewSelected.Text = "Tables is currently selected";
-                    btnCreate.Enabled = false;
-                    btnUpdate.Enabled = true;
-                    btnDelete.Enabled = false;
-                    btnReadOrderItems.Enabled = false;
-                    btnOrderItemsCreate.Enabled = false;
-                    btnOrderItemsDelete.Enabled = false;
-                    chkBDiscounted.Enabled = false;
-                    break;
-                case "filteredUsersProjectionManagement":
-                    List<Staff> filteredUPM = staffCollection.Find("{}").Project<Staff>("{_id: 1, Name: 1, Role: 1}").ToList();
-                    dataGridView1.DataSource = filteredUPM;
                     btnCreate.Enabled = false;
                     btnUpdate.Enabled = true;
                     btnDelete.Enabled = false;
