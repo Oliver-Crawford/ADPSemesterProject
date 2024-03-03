@@ -151,9 +151,9 @@ namespace ADPSemesterProject
         }
         private void btnStaff_Click(object sender, EventArgs e)
         {
-            ADPStaff ADPStaff = new ADPStaff(username, accessLevel, password, this);
+            OOPStaff OOPStaff = new OOPStaff(username, accessLevel, password, this);
             this.Hide();
-            ADPStaff.Show();
+            OOPStaff.Show();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
