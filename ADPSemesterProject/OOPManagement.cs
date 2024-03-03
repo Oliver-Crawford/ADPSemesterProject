@@ -117,7 +117,7 @@ namespace ADPSemesterProject
                     lCurrentViewSelected.Text = "Users is currently selected";
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
+                        cmd.CommandText = $"select _id, Name, Role from staff";
                         conn.Open();
                         SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
                         ad.Fill(dt);
@@ -259,12 +259,12 @@ namespace ADPSemesterProject
                         case 0:
                             txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                             break;
-                        case 3:
-                            txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        case 2:
+                            txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
                             break;
                         case -1:
                             txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                            txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            txtBUsersRole.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
                             break;
                         default:
                             break;

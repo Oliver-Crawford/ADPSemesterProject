@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Data.SQLite;
+using System.Numerics;
 
 namespace ADPSemesterProject
 {
@@ -103,7 +104,7 @@ namespace ADPSemesterProject
                     dataGridView1.DataSource = dt;
                     btnCreate.Enabled = true;
                     btnUpdate.Enabled = true;
-                    btnDelete.Enabled = true;
+                    btnDelete.Enabled = false;
                     btnReadOrderItems.Enabled = false;
                     btnOrderItemsCreate.Enabled = false;
                     btnOrderItemsDelete.Enabled = false;
@@ -207,39 +208,6 @@ namespace ADPSemesterProject
                     break;
 
             }
-        }
-
-
-
-
-
-
-
-        private void btnPrintBill_Click(object sender, EventArgs e)
-        {
-            ObjectId orderId;
-            if (!ObjectId.TryParse(txtBID.Text, out orderId))
-            {
-                DisplayError("invalidID", txtBID.Text);
-                return;
-            }
-            var ordersFilter = Builders<Orders>.Filter.Eq("ID", orderId);
-            List<Orders> filteredOrders = ordersCollection.Find(ordersFilter).ToList();
-            if (filteredOrders.Count == 0)
-            {
-                DisplayError("invalidID", txtBID.Text);
-                return;
-            }
-            var orderItemsFilter = Builders<ItemsOrdered>.Filter.Eq("OrdersForeignKey", orderId);
-            List<ItemsOrdered> filteredItemsOrdered = itemsOrderedCollection.Find(orderItemsFilter).ToList();
-            string receipt = "ORDER: ";
-            receipt += filteredOrders[0].ID + "\n";
-            foreach (var item in filteredItemsOrdered)
-            {
-                receipt += $"{item.Name}: {item.Cost}$\n";
-            }
-            receipt += "Total: " + filteredOrders[0].TotalCost + "$";
-            MessageBox.Show(receipt);
         }
 
         private void OOPStaff_FormClosed(object sender, FormClosedEventArgs e)
@@ -575,6 +543,57 @@ namespace ADPSemesterProject
             DisplayContent("ordersCollection");
         }
 
+        private void btnPrintBill_Click(object sender, EventArgs e)
+        {
+            //Grab orders info, itemsordered info, compile a receipt and print it.
+            int id = -1;
+            DataTable dt = new DataTable();
+            double total = 0;
+            string orderNumber = "";
+            string receipt = "ORDER: ";
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            //orders info
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"select * from orders where _id = {id}";
+                conn.Open();
+                SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                ad.Fill(dt);
+                ad.Dispose();
+            }
+            conn.Close();
+            foreach(DataRow row in dt.Rows)
+            {
+                orderNumber = row.ItemArray[0].ToString();
+                total = double.Parse(row.ItemArray[1].ToString());
+            }
+            dt.Clear();
+            //add order number to recipt
+            receipt += orderNumber + "\n";
+
+            //itemsordered info
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"select * from itemsordered where ordersForeignKey = {id}";
+                conn.Open();
+                SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                ad.Fill(dt);
+                ad.Dispose();
+            }
+            conn.Close();
+            foreach (DataRow row in dt.Rows)
+            {
+                receipt += $"{row.ItemArray[2]}: {row.ItemArray[4]}$\n";
+            }
+            dt.Clear();
+            //finish making and printing the receipt
+            receipt += $"Total: {total}$";
+            MessageBox.Show(receipt);
+        }
     }
 }
 

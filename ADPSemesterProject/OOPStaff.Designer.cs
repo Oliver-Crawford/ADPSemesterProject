@@ -66,6 +66,7 @@
             btnPrintBill.TabIndex = 146;
             btnPrintBill.Text = "Print Bill";
             btnPrintBill.UseVisualStyleBackColor = true;
+            btnPrintBill.Click += btnPrintBill_Click;
             // 
             // txtBTableOrderId
             // 
