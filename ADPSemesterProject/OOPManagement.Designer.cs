@@ -304,6 +304,7 @@
             btnUsersRead.TabIndex = 91;
             btnUsersRead.Text = "Read";
             btnUsersRead.UseVisualStyleBackColor = true;
+            btnUsersRead.Click += btnUsersRead_Click;
             // 
             // lUsers
             // 

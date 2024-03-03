@@ -273,12 +273,6 @@ namespace ADPSemesterProject
             }
         }
 
-        private void btnUsersRead_Click(object sender, EventArgs e)
-        {
-            DisplayContent("filteredUsersProjectionManagement");
-            currentView = "user";
-            lCurrentViewSelected.Text = "Users is currently selected";
-        }
 
 
 
@@ -525,6 +519,13 @@ namespace ADPSemesterProject
             DisplayContent("ordersCollection");
             currentView = "order";
             lCurrentViewSelected.Text = "Orders is currently selected";
+        }
+
+        private void btnUsersRead_Click(object sender, EventArgs e)
+        {
+            DisplayContent("filteredUsersProjectionManagement");
+            currentView = "user";
+            lCurrentViewSelected.Text = "Users is currently selected";
         }
     }
 }
