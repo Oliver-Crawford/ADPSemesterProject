@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Data.SQLite;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ADPSemesterProject
 {
@@ -208,50 +209,7 @@ namespace ADPSemesterProject
 
 
 
-        private void btnOrderItemsCreate_Click(object sender, EventArgs e)
-        {
-            //get the menu info, doing this first so if it doesn't exist then it won't insert bad data into the DB
-            var builderGetMenuInfo = Builders<Menu>.Filter;
-            var filterGetMenuInfo = builderGetMenuInfo.Eq("Name", txtBOrderItemsName.Text);
-            List<Menu> filteredMenuInfoList = menuCollection.Find(filterGetMenuInfo).Project<Menu>("{_id: -1, Cost: 1, Discount: 1}").ToList();
-            if (filteredMenuInfoList.Count == 0)
-            {
-                DisplayError("badItemName", txtBOrderItemsName.Text);
-                return;
-            }
-            //check and make sure related ID exists
-            ObjectId foreignKey;
-            if (!ObjectId.TryParse(txtBID.Text, out foreignKey))
-            {
-                DisplayError("invalidID", txtBID.Text);
-            }
-            ItemsOrdered newItemsOrdered = new ItemsOrdered() { Name = txtBOrderItemsName.Text, Discounted = chkBDiscounted.Checked, OrdersForeignKey = foreignKey };
-            //grab the order info before inserting, to account for the order not existing anymore for some reason
-            var builderGetOrderInfo = Builders<Orders>.Filter;
-            var filterGetOrderInfo = builderGetOrderInfo.Eq("ID", newItemsOrdered.OrdersForeignKey);
-            List<Orders> filteredOrderInfo = ordersCollection.Find(filterGetOrderInfo).ToList();
-            if (filteredOrderInfo.Count == 0)
-            {
-                DisplayError("orphanedItem", txtBID.Text);
-                return;
-            }
-            //calculate the amount to be added to the total
-            double toAdd = filteredMenuInfoList[0].Cost;
-            double discountAmount = 0.0;
-            if (newItemsOrdered.Discounted)
-            {
-                discountAmount = filteredMenuInfoList[0].Discount;
-            }
-            toAdd = Double.Round(toAdd - (toAdd * discountAmount), 2);
-            double total = filteredOrderInfo[0].TotalCost + toAdd;
-            newItemsOrdered.Cost = toAdd;
-            //after the cost is added to the itemorder insert it and update the order
-            itemsOrderedCollection.InsertOne(newItemsOrdered);
-            var filterUpdateTotalCost = Builders<Orders>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-            var updateUpdateTotalCost = Builders<Orders>.Update.Set("TotalCost", total);
-            ordersCollection.UpdateOne(filterUpdateTotalCost, updateUpdateTotalCost);
-            DisplayContent("ordersCollection");
-        }
+
 
         private void btnOrderItemsDelete_Click(object sender, EventArgs e)
         {
@@ -525,6 +483,70 @@ namespace ADPSemesterProject
                     DisplayErrorUnknownSelectionHandler(e);
                     break;
             }
+        }
+
+        private void btnOrderItemsCreate_Click(object sender, EventArgs e)
+        {
+            ////get the menu info, doing this first so if it doesn't exist then it won't insert bad data into the DB
+            //var builderGetMenuInfo = Builders<Menu>.Filter;
+            //var filterGetMenuInfo = builderGetMenuInfo.Eq("Name", txtBOrderItemsName.Text);
+            //List<Menu> filteredMenuInfoList = menuCollection.Find(filterGetMenuInfo).Project<Menu>("{_id: -1, Cost: 1, Discount: 1}").ToList();
+            //if (filteredMenuInfoList.Count == 0)
+            //{
+            //    DisplayError("badItemName", txtBOrderItemsName.Text);
+            //    return;
+            //}
+            ////check and make sure related ID exists
+            //ObjectId foreignKey;
+            //if (!ObjectId.TryParse(txtBID.Text, out foreignKey))
+            //{
+            //    DisplayError("invalidID", txtBID.Text);
+            //}
+            //ItemsOrdered newItemsOrdered = new ItemsOrdered() { Name = txtBOrderItemsName.Text, Discounted = chkBDiscounted.Checked, OrdersForeignKey = foreignKey };
+            ////grab the order info before inserting, to account for the order not existing anymore for some reason
+            //var builderGetOrderInfo = Builders<Orders>.Filter;
+            //var filterGetOrderInfo = builderGetOrderInfo.Eq("ID", newItemsOrdered.OrdersForeignKey);
+            //List<Orders> filteredOrderInfo = ordersCollection.Find(filterGetOrderInfo).ToList();
+            //if (filteredOrderInfo.Count == 0)
+            //{
+            //    DisplayError("orphanedItem", txtBID.Text);
+            //    return;
+            //}
+            ////calculate the amount to be added to the total
+            //double toAdd = filteredMenuInfoList[0].Cost;
+            //double discountAmount = 0.0;
+            //if (newItemsOrdered.Discounted)
+            //{
+            //    discountAmount = filteredMenuInfoList[0].Discount;
+            //}
+            //toAdd = Double.Round(toAdd - (toAdd * discountAmount), 2);
+            //double total = filteredOrderInfo[0].TotalCost + toAdd;
+            //newItemsOrdered.Cost = toAdd;
+            ////after the cost is added to the itemorder insert it and update the order
+            //itemsOrderedCollection.InsertOne(newItemsOrdered);
+            //var filterUpdateTotalCost = Builders<Orders>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
+            //var updateUpdateTotalCost = Builders<Orders>.Update.Set("TotalCost", total);
+            //ordersCollection.UpdateOne(filterUpdateTotalCost, updateUpdateTotalCost);
+
+
+            //make sure foreigninsert new items ordered, update orders total cost
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
+                conn.Open();
+                SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                ad.Fill(dt);
+                ad.Dispose();
+            }
+            conn.Close();
+            using (var cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"insert into staff (Name, Password, Role, AccessLevel) Values ('{txtBUsersName.Text}', '{txtBUsersPassword.Text}', '{txtBUsersRole.Text}', {tryParseAccess});";
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+            conn.Close();
+            DisplayContent("ordersCollection");
         }
     }
 }

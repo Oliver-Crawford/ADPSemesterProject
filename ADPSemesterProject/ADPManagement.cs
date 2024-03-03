@@ -460,6 +460,7 @@ namespace ADPSemesterProject
             if(!ObjectId.TryParse(txtBID.Text, out foreignKey))
             {
                 DisplayError("invalidID", txtBID.Text);
+                return;
             }
             ItemsOrdered newItemsOrdered = new ItemsOrdered() { Name = txtBOrderItemsName.Text, Discounted = chkBDiscounted.Checked, OrdersForeignKey = foreignKey };
             //grab the order info before inserting, to account for the order not existing anymore for some reason
