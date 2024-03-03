@@ -187,12 +187,7 @@ namespace ADPSemesterProject
 
 
 
-        private void btnUsersRead_Click(object sender, EventArgs e)
-        {
-            DisplayContent("staffCollection");
-            currentView = true;
-            lCurrentViewSelected.Text = "Users is currently selected";
-        }
+
 
 
 
@@ -446,6 +441,13 @@ namespace ADPSemesterProject
             DisplayContent("menuCollection");
             currentView = false;
             lCurrentViewSelected.Text = "Menu is currently selected";
+        }
+
+        private void btnUsersRead_Click(object sender, EventArgs e)
+        {
+            DisplayContent("staffCollection");
+            currentView = true;
+            lCurrentViewSelected.Text = "Users is currently selected";
         }
     }
 }
