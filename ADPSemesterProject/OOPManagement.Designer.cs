@@ -356,6 +356,7 @@
             Controls.Add(dataGridView1);
             Name = "OOPManagement";
             Text = "OOPManagement";
+            FormClosed += OOPManagement_FormClosed;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();

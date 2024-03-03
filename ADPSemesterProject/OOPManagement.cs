@@ -122,8 +122,9 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "itemsOrderedCollection":
-                    int id; 
-                    if(!int.TryParse(txtBID.Text, out id)){
+                    int id;
+                    if (!int.TryParse(txtBID.Text, out id))
+                    {
                         DisplayError("invalidID", txtBID.Text);
                         break;
                     }
@@ -190,10 +191,7 @@ namespace ADPSemesterProject
             }
         }
 
-        private void ADPManagement_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
-        }
+
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -518,6 +516,11 @@ namespace ADPSemesterProject
             DisplayContent("tablesCollection");
             currentView = "tables";
             lCurrentViewSelected.Text = "Tables is currently selected";
+        }
+
+        private void OOPManagement_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
         }
     }
 }
