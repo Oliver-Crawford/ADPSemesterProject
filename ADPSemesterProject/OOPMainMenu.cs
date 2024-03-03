@@ -138,9 +138,9 @@ namespace ADPSemesterProject
 
         private void btnAdmin_Click(object sender, EventArgs e)
         {
-            ADPAdmin ADPAdmin = new ADPAdmin(username, accessLevel, password, this);
+            OOPAdmin OOPAdmin = new OOPAdmin(username, accessLevel, password, this);
             this.Hide();
-            ADPAdmin.Show();
+            OOPAdmin.Show();
         }
 
         private void btnManagement_Click(object sender, EventArgs e)

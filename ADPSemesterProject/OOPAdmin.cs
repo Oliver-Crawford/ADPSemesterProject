@@ -163,7 +163,7 @@ namespace ADPSemesterProject
                 //for Users
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = $"delete from staff where id = {id}";
+                    cmd.CommandText = $"delete from staff where _id = {id}";
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -175,7 +175,7 @@ namespace ADPSemesterProject
                 //for Menu
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = $"delete from menu where id = {id}";
+                    cmd.CommandText = $"delete from menu where _id = {id}";
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -269,7 +269,7 @@ namespace ADPSemesterProject
                 }
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = $"update staff set Name = '{txtBUsersName.Text}', Password = '{txtBUsersPassword.Text}', Role = '{txtBUsersRole.Text}', AccessLevel = {tryParseAccessLevel} where id = {id};";
+                    cmd.CommandText = $"update staff set Name = '{txtBUsersName.Text}', Password = '{txtBUsersPassword.Text}', Role = '{txtBUsersRole.Text}', AccessLevel = {tryParseAccessLevel} where _id = {id};";
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -298,7 +298,7 @@ namespace ADPSemesterProject
                 }
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = $"update menu set Name = '{txtBMenuName.Text}', Cost = {tryParseCost}, Discount = {tryParseDiscount}, Category = '{txtBMenuCategory.Text}', Description = '{txtBMenuDescription.Text}' where id = {id};";
+                    cmd.CommandText = $"update menu set Name = '{txtBMenuName.Text}', Cost = {tryParseCost}, Discount = {tryParseDiscount}, Category = '{txtBMenuCategory.Text}', Description = '{txtBMenuDescription.Text}' where _id = {id};";
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
