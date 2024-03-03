@@ -119,28 +119,15 @@ namespace ADPSemesterProject
         {
             switch (collectionName)
             {
-                case "menuCollection":
-                    List<Menu> menuList = menuCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = menuList;
-                    break;
-                case "ordersCollection":
-                    List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = ordersList;
-                    break;
                 case "staffCollection":
                     List<Staff> staffList = staffCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = staffList;
-                    break;
-                case "tablesCollection":
-                    List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = tablesList;
                     break;
                 case "filteredSCUserOnly":
                     var builderC2 = Builders<Staff>.Filter;
                     var filterC2 = builderC2.Eq("Name", username) & builderC2.Eq("Password", password);
                     List<Staff> filteredUserOnlyList = staffCollection.Find(filterC2).ToList();
                     dataGridView1.DataSource = filteredUserOnlyList;
-
                     break;
                 default:
                     MessageBox.Show("No known collection called " + collectionName);
