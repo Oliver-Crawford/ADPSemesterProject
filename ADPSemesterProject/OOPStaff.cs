@@ -210,21 +210,6 @@ namespace ADPSemesterProject
         }
 
 
-        private void btnCreate_Click(object sender, EventArgs e)
-        {
-            switch (currentView)
-            {
-                case "order":
-                    Orders newOrder = new Orders() { TotalCost = 0.0 };
-                    ordersCollection.InsertOne(newOrder);
-                    DisplayContent("ordersCollection");
-                    break;
-
-                default:
-                    DisplayErrorUnknownSelectionHandler(e);
-                    break;
-            }
-        }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -482,6 +467,39 @@ namespace ADPSemesterProject
         private void btnReadOrderItems_Click(object sender, EventArgs e)
         {
             DisplayContent("itemsOrderedCollection");
+        }
+
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+            int id;
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
+            switch (currentView)
+            {
+                case "order":
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"delete from orders where _id = {id}";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"delete from itemsordered where ordersForeignKey = {id}";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    DisplayContent("ordersCollection");
+                    break;
+                default:
+                    DisplayErrorUnknownSelectionHandler(e);
+                    break;
+            }
         }
     }
 }
