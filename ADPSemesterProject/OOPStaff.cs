@@ -471,35 +471,39 @@ namespace ADPSemesterProject
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            int id;
-            if (!int.TryParse(txtBID.Text, out id))
-            {
-                DisplayError("invalidID", txtBID.Text);
-                return;
-            }
             switch (currentView)
             {
                 case "order":
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    using (var cmd = new SQLiteCommand(conn))
                     {
-                        cmd.CommandText = $"delete from orders where _id = {id}";
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                    conn.Close();
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        cmd.CommandText = $"delete from itemsordered where ordersForeignKey = {id}";
+                        cmd.CommandText = $"insert into orders (ItemsOrdered) Values (0.0);";
                         conn.Open();
                         cmd.ExecuteNonQuery();
                     }
                     conn.Close();
                     DisplayContent("ordersCollection");
                     break;
+                case "tables":
+                    int foreignKey;
+                    if (!int.TryParse(txtBTableOrderId.Text, out foreignKey))
+                    {
+                        DisplayError("invalidID", txtBID.Text);
+                        break;
+                    }
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"insert into tables (TableStatus, OrderStatus, OrdersId) Values ('{txtBTableStatus.Text}', '{txtBTableOrderStatus.Text}', {foreignKey});";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                    DisplayContent("tablesCollection");
+                    break;
                 default:
                     DisplayErrorUnknownSelectionHandler(e);
                     break;
             }
         }
+    }
     }
 }
