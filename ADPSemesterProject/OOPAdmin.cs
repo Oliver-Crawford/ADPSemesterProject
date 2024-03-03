@@ -386,6 +386,12 @@ namespace ADPSemesterProject
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            int id;
+            if (!int.TryParse(txtBID.Text, out id))
+            {
+                DisplayError("invalidID", txtBID.Text);
+                return;
+            }
             if (currentView)
             {
                 //for Users
@@ -400,10 +406,13 @@ namespace ADPSemesterProject
                     DisplayError("accessLevelOutOfRangeError");
                     return;
                 }
-                var filter = Builders<Staff>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                var update = Builders<Staff>.Update.Set("Name", txtBUsersName.Text).Set("Password", txtBUsersPassword.Text).Set("Role", txtBUsersRole.Text).Set("AccessLevel", tryParseAccessLevel);
-                staffCollection.UpdateOne(filter, update);
-
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = $"update staff set Name = '{txtBUsersName.Text}', Password = '{txtBUsersPassword.Text}', Role = '{txtBUsersRole.Text}', AccessLevel = {tryParseAccessLevel} where id = {id};";
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
                 DisplayContent("staffCollection");
             }
             else
@@ -426,9 +435,13 @@ namespace ADPSemesterProject
                     DisplayError("menuDiscountOutOfRangeError");
                     return;
                 }
-                var filter = Builders<Menu>.Filter.Eq("ID", ObjectId.Parse(txtBID.Text));
-                var update = Builders<Menu>.Update.Set("Name", txtBMenuName.Text).Set("Cost", tryParseCost).Set("Discount", tryParseDiscount).Set("Category", txtBMenuCategory.Text).Set("Description", txtBMenuDescription.Text);
-                menuCollection.UpdateOne(filter, update);
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = $"update menu set Name = '{txtBMenuName.Text}', Cost = {tryParseCost}, Discount = {tryParseDiscount}, Category = '{txtBMenuCategory.Text}', Description = '{txtBMenuDescription.Text}' where id = {id};";
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
                 DisplayContent("menuCollection");
             }
         }
