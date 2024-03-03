@@ -44,6 +44,7 @@ namespace ADPSemesterProject
             switch (collectionName)
             {
                 case "menuCollection":
+
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
                         cmd.CommandText = "select * from orders";
@@ -56,6 +57,8 @@ namespace ADPSemesterProject
                     dataGridView1.DataSource = dt;
                     break;
                 case "ordersCollection":
+                    currentView = "order";
+                    lCurrentViewSelected.Text = "Orders is currently selected";
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
                         cmd.CommandText = "select * from orders";
@@ -75,6 +78,8 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "staffCollection":
+                    currentView = "user";
+                    lCurrentViewSelected.Text = "Users is currently selected";
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
                         cmd.CommandText = "select * from staff";
@@ -87,6 +92,8 @@ namespace ADPSemesterProject
                     dataGridView1.DataSource = dt;
                     break;
                 case "tablesCollection":
+                    currentView = "tables";
+                    lCurrentViewSelected.Text = "Tables is currently selected";
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
                         cmd.CommandText = "select * from tables";
@@ -106,6 +113,8 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "filteredUsersProjectionManagement":
+                    currentView = "user";
+                    lCurrentViewSelected.Text = "Users is currently selected";
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
                         cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
@@ -125,10 +134,13 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "itemsOrderedCollection":
+                    currentView = "itemsordered";
+                    lCurrentViewSelected.Text = "Order Items is currently selected";
                     int id;
                     if (!int.TryParse(txtBID.Text, out id))
                     {
                         DisplayError("invalidID", txtBID.Text);
+                        DisplayContent("ordersCollection");
                         break;
                     }
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -215,29 +227,21 @@ namespace ADPSemesterProject
         private void btnTableRead_Click(object sender, EventArgs e)
         {
             DisplayContent("tablesCollection");
-            currentView = "tables";
-            lCurrentViewSelected.Text = "Tables is currently selected";
         }
 
         private void btnReadOrderItems_Click(object sender, EventArgs e)
         {
-            currentView = "itemsordered";
-            lCurrentViewSelected.Text = "Order Items is currently selected";
             DisplayContent("itemsOrderedCollection");
         }
 
         private void btnOrdersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("ordersCollection");
-            currentView = "order";
-            lCurrentViewSelected.Text = "Orders is currently selected";
         }
 
         private void btnUsersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("filteredUsersProjectionManagement");
-            currentView = "user";
-            lCurrentViewSelected.Text = "Users is currently selected";
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -284,6 +288,11 @@ namespace ADPSemesterProject
                             break;
                         case 3:
                             txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                            break;
+                        case -1:
+                            txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                            txtBOrderItemsName.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            chkBDiscounted.Checked = bool.Parse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
                             break;
                     }
                     break;
@@ -578,7 +587,7 @@ namespace ADPSemesterProject
             }
             foreach (DataRow dr in dt.Rows)
             {
-                newTotal = double.Parse(dr.ItemArray[1].ToString());
+                newTotal = double.Parse(dr.ItemArray[5].ToString());
             }
             dt.Clear();
             //Calculate actual new total

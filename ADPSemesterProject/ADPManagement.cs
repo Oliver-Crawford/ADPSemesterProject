@@ -113,6 +113,8 @@ namespace ADPSemesterProject
                     dataGridView1.DataSource = menuList;
                     break;
                 case "ordersCollection":
+                    currentView = "order";
+                    lCurrentViewSelected.Text = "Orders is currently selected";
                     List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = ordersList;
                     btnCreate.Enabled = true;
@@ -124,10 +126,14 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "staffCollection":
+                    lCurrentViewSelected.Text = "Users is currently selected";
+                    currentView = "user";
                     List<Staff> staffList = staffCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = staffList;
                     break;
                 case "tablesCollection":
+                    lCurrentViewSelected.Text = "Tables is currently selected";
+                    currentView = "tables";
                     List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
                     dataGridView1.DataSource = tablesList;
                     btnCreate.Enabled = true;
@@ -139,6 +145,8 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "filteredUsersProjectionManagement":
+                    currentView = "user";
+                    lCurrentViewSelected.Text = "Users is currently selected";
                     List<Staff> filteredUPM = staffCollection.Find("{}").Project<Staff>("{_id: 1, Name: 1, Role: 1}").ToList();
                     dataGridView1.DataSource = filteredUPM;
                     btnCreate.Enabled = false;
@@ -150,10 +158,13 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "itemsOrderedCollection":
+                    currentView = "itemsordered";
+                    lCurrentViewSelected.Text = "Order Items is currently selected";
                     ObjectId itemsOrderedId;
                     if(!ObjectId.TryParse(txtBID.Text, out itemsOrderedId))
                     {
                         DisplayError("invalidID", txtBID.Text);
+                        DisplayContent("ordersCollection");
                         break;
                     }
                     var itemsOrderedBuilder = Builders<ItemsOrdered>.Filter;
@@ -248,7 +259,7 @@ namespace ADPSemesterProject
                     txtBID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                     txtBTableOrderId.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                     break;
-                case "itemsordered":
+                case "itemsOrdered":
                     switch (e.ColumnIndex)
                     {
                         case 0:
@@ -301,15 +312,11 @@ namespace ADPSemesterProject
         private void btnUsersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("filteredUsersProjectionManagement");
-            currentView = "user";
-            lCurrentViewSelected.Text = "Users is currently selected";
         }
 
         private void btnOrdersRead_Click(object sender, EventArgs e)
         {
             DisplayContent("ordersCollection");
-            currentView = "order";
-            lCurrentViewSelected.Text = "Orders is currently selected";
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -412,8 +419,6 @@ namespace ADPSemesterProject
 
         private void btnReadOrderItems_Click(object sender, EventArgs e)
         {
-            currentView = "itemsordered";
-            lCurrentViewSelected.Text = "Order Items is currently selected";
             DisplayContent("itemsOrderedCollection");
         }
 
@@ -528,8 +533,6 @@ namespace ADPSemesterProject
         private void btnTableRead_Click(object sender, EventArgs e)
         {
             DisplayContent("tablesCollection");
-            currentView = "tables";
-            lCurrentViewSelected.Text = "Tables is currently selected";
         }
     }
 }
