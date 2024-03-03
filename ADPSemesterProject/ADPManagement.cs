@@ -440,12 +440,23 @@ namespace ADPSemesterProject
                     break;
                 case "tables":
                     ObjectId foreignKey;
-                    if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
+                    Tables newTable = new Tables();
+                    if(txtBTableOrderId.Text == "")
                     {
-                        DisplayError("invalidID", txtBID.Text);
-                        break;
+                        newTable.TableStatus = txtBTableStatus.Text;
+                        newTable.OrderStatus = txtBTableOrderStatus.Text;
                     }
-                    Tables newTable = new Tables() {TableStatus = txtBTableStatus.Text, OrderStatus = txtBTableOrderStatus.Text, OrdersForeignKey = foreignKey};
+                    else
+                    {
+                        if (!ObjectId.TryParse(txtBTableOrderId.Text, out foreignKey))
+                        {
+                            DisplayError("invalidID", txtBID.Text);
+                            break;
+                        }
+                        newTable.TableStatus = txtBTableStatus.Text;
+                        newTable.OrderStatus = txtBTableOrderStatus.Text;
+                        newTable.OrdersForeignKey = foreignKey;
+                    }
                     tablesCollection.InsertOne(newTable);
                     DisplayContent("tablesCollection");
                     break;
