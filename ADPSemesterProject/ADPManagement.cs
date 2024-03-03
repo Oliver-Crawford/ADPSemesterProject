@@ -108,10 +108,6 @@ namespace ADPSemesterProject
         {
             switch (collectionName)
             {
-                case "menuCollection":
-                    List<Menu> menuList = menuCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = menuList;
-                    break;
                 case "ordersCollection":
                     currentView = "order";
                     lCurrentViewSelected.Text = "Orders is currently selected";
@@ -124,12 +120,6 @@ namespace ADPSemesterProject
                     btnOrderItemsCreate.Enabled = false;
                     btnOrderItemsDelete.Enabled = false;
                     chkBDiscounted.Enabled = false;
-                    break;
-                case "staffCollection":
-                    lCurrentViewSelected.Text = "Users is currently selected";
-                    currentView = "user";
-                    List<Staff> staffList = staffCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = staffList;
                     break;
                 case "tablesCollection":
                     lCurrentViewSelected.Text = "Tables is currently selected";
