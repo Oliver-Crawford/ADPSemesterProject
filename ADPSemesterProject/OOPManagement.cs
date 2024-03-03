@@ -37,15 +37,32 @@ namespace ADPSemesterProject
         //Displays table contents based on the given collection name
         public void DisplayContent(string collectionName)
         {
+            DataTable dt = new DataTable();
             switch (collectionName)
             {
                 case "menuCollection":
-                    List<Menu> menuList = menuCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = menuList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from orders";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     break;
                 case "ordersCollection":
-                    List<Orders> ordersList = ordersCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = ordersList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from orders";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     btnCreate.Enabled = true;
                     btnUpdate.Enabled = false;
                     btnDelete.Enabled = true;
@@ -55,12 +72,28 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "staffCollection":
-                    List<Staff> staffList = staffCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = staffList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from staff";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     break;
                 case "tablesCollection":
-                    List<Tables> tablesList = tablesCollection.AsQueryable().ToList();
-                    dataGridView1.DataSource = tablesList;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = "select * from tables";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     btnCreate.Enabled = true;
                     btnUpdate.Enabled = true;
                     btnDelete.Enabled = true;
@@ -70,8 +103,16 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "filteredUsersProjectionManagement":
-                    List<Staff> filteredUPM = staffCollection.Find("{}").Project<Staff>("{_id: 1, Name: 1, Role: 1}").ToList();
-                    dataGridView1.DataSource = filteredUPM;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"select * from staff where Name = '{username}' and Password = '{password}'";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     btnCreate.Enabled = false;
                     btnUpdate.Enabled = true;
                     btnDelete.Enabled = false;
@@ -81,16 +122,21 @@ namespace ADPSemesterProject
                     chkBDiscounted.Enabled = false;
                     break;
                 case "itemsOrderedCollection":
-                    ObjectId itemsOrderedId;
-                    if (!ObjectId.TryParse(txtBID.Text, out itemsOrderedId))
-                    {
+                    int id; 
+                    if(!int.TryParse(txtBID.Text, out id)){
                         DisplayError("invalidID", txtBID.Text);
                         break;
                     }
-                    var itemsOrderedBuilder = Builders<ItemsOrdered>.Filter;
-                    var itemsOrderedFilter = itemsOrderedBuilder.Eq("OrdersForeignKey", itemsOrderedId);
-                    List<ItemsOrdered> filteredOrders = itemsOrderedCollection.Find(itemsOrderedFilter).ToList();
-                    dataGridView1.DataSource = filteredOrders;
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        cmd.CommandText = $"select * from itemsordered where ordersForeignKey = {id}";
+                        conn.Open();
+                        SQLiteDataAdapter ad = new SQLiteDataAdapter(cmd);
+                        ad.Fill(dt);
+                        ad.Dispose();
+                    }
+                    conn.Close();
+                    dataGridView1.DataSource = dt;
                     btnCreate.Enabled = false;
                     btnUpdate.Enabled = false;
                     btnDelete.Enabled = false;
