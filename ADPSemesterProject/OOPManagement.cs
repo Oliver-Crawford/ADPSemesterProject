@@ -555,6 +555,14 @@ namespace ADPSemesterProject
                 cmd.ExecuteNonQuery();
             }
             conn.Close();
+            //delete itemordered
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = $"delete from itemsordered where _id = {foreignKey}";
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+            conn.Close();
             DisplayContent("ordersCollection");
         }
     }
