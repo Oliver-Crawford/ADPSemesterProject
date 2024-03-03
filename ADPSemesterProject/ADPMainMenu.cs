@@ -26,36 +26,9 @@ namespace ADPSemesterProject
         //MongoDB connection
         public static MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
         public static IMongoDatabase db = dbClient.GetDatabase("semester");
-        static IMongoCollection<Menu> menuCollection = db.GetCollection<Menu>("menu");
-        static IMongoCollection<Orders> ordersCollection = db.GetCollection<Orders>("orders");
         static IMongoCollection<Staff> staffCollection = db.GetCollection<Staff>("staff");
-        static IMongoCollection<Tables> tablesCollection = db.GetCollection<Tables>("tables");
 
         //These classes are my collection definitions
-        class Menu
-        {
-            [BsonId]
-            public BsonObjectId ID { get; set; }
-            [BsonElement("Name")]
-            public string Name { get; set; }
-            [BsonElement("Cost")]
-            public double Cost { get; set; }
-            [BsonElement("Discount")]
-            public double Discount { get; set; }
-            [BsonElement("Category")]
-            public string Category { get; set; }
-            [BsonElement("Description")]
-            public string Description { get; set; }
-        }
-        class Orders
-        {
-            [BsonId]
-            public BsonObjectId ID { get; set; }
-            [BsonElement("ItemsOrdered")]
-            public List<string> ItemsOrdered { get; set; }
-            [BsonElement("TotalCost")]
-            public double TotalCost { get; set; }
-        }
         class Staff
         {
             [BsonId]
@@ -68,18 +41,6 @@ namespace ADPSemesterProject
             public string Role { get; set; }
             [BsonElement("AccessLevel")]
             public int AccessLevel { get; set; }
-
-        }
-        class Tables
-        {
-            [BsonId]
-            public BsonObjectId ID { get; set; }
-            [BsonElement("TableStatus")]
-            public string TableStatus { get; set; }
-            [BsonElement("OrderStatus")]
-            public string OrderStatus { get; set; }
-            [ForeignKey("OrderID")]
-            public int OrderID { get; set; }
 
         }
         public ADPMainMenu(string username, int accessLevel, string password, Form parent)
