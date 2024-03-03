@@ -207,11 +207,6 @@ namespace ADPSemesterProject
             }
         }
 
-
-
-
-
-
         private void OOPManagement_FormClosed(object sender, FormClosedEventArgs e)
         {
             parent.Show();
