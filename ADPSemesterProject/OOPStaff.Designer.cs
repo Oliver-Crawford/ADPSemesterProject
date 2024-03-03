@@ -325,6 +325,7 @@
             Controls.Add(dataGridView1);
             Name = "OOPStaff";
             Text = "OOPStaff";
+            FormClosed += OOPStaff_FormClosed;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();

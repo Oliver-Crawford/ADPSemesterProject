@@ -176,10 +176,7 @@ namespace ADPSemesterProject
                 DisplayError("unknownSelection", e.ToString());
             }
         }
-        private void ADPStaff_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
-        }
+
 
         public void DisplayError(string er, string passthrough = "")
         {
@@ -482,6 +479,11 @@ namespace ADPSemesterProject
             }
             receipt += "Total: " + filteredOrders[0].TotalCost + "$";
             MessageBox.Show(receipt);
+        }
+
+        private void OOPStaff_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            parent.Show();
         }
     }
 }
